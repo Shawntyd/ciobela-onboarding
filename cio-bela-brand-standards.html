@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cio Bela — Brand Standards Handbook</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root {
+  --ink:     #16120E;
+  --cream:   #F6F1EB;
+  --warm:    #EDE4D5;
+  --parchment: #E8DDD0;
+  --gold:    #B08D57;
+  --gold2:   #CFA96E;
+  --gold-lt: #E8D5B0;
+  --mid:     #7A6A55;
+  --muted:   #A8967E;
+  --border:  #D5C8B4;
+  --white:   #FFFFFF;
+  --alert:   #7C3B20;
+  --alert-bg:#FBF0E9;
+  --green:   #2F5C42;
+  --green-bg:#ECF4EF;
+  --section-h: 56px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Outfit', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; }
+
+/* ── HERO COVER ── */
+.hero {
+  background: var(--ink);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 24px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(176,141,87,.04) 60px, rgba(176,141,87,.04) 61px),
+    repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(176,141,87,.04) 60px, rgba(176,141,87,.04) 61px);
+}
+.hero-inner { position: relative; z-index: 1; max-width: 580px; }
+.hero-rule { width: 60px; height: 1px; background: var(--gold); margin: 0 auto 28px; }
+.hero-eyebrow { font-size: 10px; letter-spacing: .4em; text-transform: uppercase; color: var(--gold2); font-weight: 500; margin-bottom: 20px; }
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 7vw, 64px);
+  font-weight: 400;
+  color: var(--cream);
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+.hero-title em { font-style: italic; color: var(--gold2); }
+.hero-sub { font-size: 13px; color: var(--muted); font-weight: 300; letter-spacing: .06em; line-height: 1.7; margin-bottom: 36px; }
+.hero-meta { display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; margin-bottom: 48px; }
+.hero-meta-item { text-align: center; }
+.hero-meta-item .val { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--gold2); font-weight: 600; }
+.hero-meta-item .lbl { font-size: 9px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
+.hero-btn {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--white);
+  border: none;
+  padding: 15px 44px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: background .2s;
+}
+.hero-btn:hover { background: var(--mid); }
+.hero-rule2 { width: 100%; height: 1px; background: rgba(176,141,87,.2); margin-top: 48px; }
+.hero-addr { font-size: 11px; color: var(--muted); margin-top: 20px; letter-spacing: .08em; }
+
+/* ── STICKY NAV ── */
+#sticky-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--ink);
+  border-bottom: 2px solid var(--gold);
+  display: none;
+}
+#sticky-nav.visible { display: block; }
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.nav-brand { font-family: 'Playfair Display', serif; font-size: 16px; color: var(--gold2); font-weight: 400; letter-spacing: .1em; white-space: nowrap; }
+.nav-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.nav-pill {
+  font-size: 9px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 2px;
+  border: 1px solid rgba(176,141,87,.3);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+}
+.nav-pill:hover { border-color: var(--gold); color: var(--gold2); }
+.nav-pill.done { border-color: var(--gold); color: var(--gold); background: rgba(176,141,87,.1); }
+
+/* ── MAIN CONTENT ── */
+.main { max-width: 860px; margin: 0 auto; padding: 0 20px 80px; }
+
+/* ── SECTION ── */
+.section {
+  margin-bottom: 4px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px;
+  background: var(--white);
+  cursor: pointer;
+  transition: background .2s;
+  gap: 16px;
+  user-select: none;
+}
+.section-header:hover { background: var(--warm); }
+.section-header.open { background: var(--ink); }
+
+.sh-left { display: flex; align-items: center; gap: 18px; }
+.sh-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--border);
+  min-width: 36px;
+  transition: color .2s;
+}
+.section-header.open .sh-num { color: var(--gold); }
+.section-header.done .sh-num { color: var(--gold2); }
+.sh-info {}
+.sh-tag { font-size: 9px; letter-spacing: .28em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+.section-header.open .sh-tag { color: var(--gold2); }
+.sh-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 400; color: var(--ink); }
+.section-header.open .sh-title { color: var(--cream); }
+.section-header.done .sh-title { color: var(--ink); }
+
+.sh-right { display: flex; align-items: center; gap: 12px; }
+.sh-badge {
+  font-size: 9px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  white-space: nowrap;
+  transition: all .2s;
+}
+.section-header.done .sh-badge { background: var(--green); color: #fff; border-color: var(--green); }
+.sh-arrow { font-size: 18px; color: var(--muted); transition: transform .3s; }
+.section-header.open .sh-arrow { transform: rotate(180deg); color: var(--gold2); }
+
+.section-body {
+  display: none;
+  padding: 0;
+  background: var(--white);
+  border-top: 1px solid var(--border);
+}
+.section-body.open { display: block; }
+.section-content { padding: 32px 36px; }
+@media(max-width:600px){ .section-content { padding: 24px 20px; } }
+
+/* ── CONTENT BLOCKS ── */
+.rule-block {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--warm);
+}
+.rule-block:last-of-type { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+.rule-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.rule-title::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 16px;
+  background: var(--gold);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.rule-body {
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--ink);
+  font-weight: 300;
+}
+.rule-body strong { font-weight: 600; color: var(--ink); }
+
+.do-dont {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 14px;
+}
+@media(max-width:520px){ .do-dont{grid-template-columns:1fr;} }
+
+.do-col, .dont-col {
+  border-radius: 3px;
+  padding: 14px 16px;
+}
+.do-col { background: var(--green-bg); border-left: 3px solid var(--green); }
+.dont-col { background: var(--alert-bg); border-left: 3px solid var(--alert); }
+.dd-head {
+  font-size: 9px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.do-col .dd-head { color: var(--green); }
+.dont-col .dd-head { color: var(--alert); }
+.dd-item {
+  font-size: 12.5px;
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--ink);
+  padding-left: 14px;
+  position: relative;
+  margin-bottom: 6px;
+}
+.do-col .dd-item::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 600; }
+.dont-col .dd-item::before { content: '✕'; position: absolute; left: 0; color: var(--alert); font-weight: 600; }
+
+.callout {
+  background: var(--parchment);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 4px 4px 0;
+  padding: 14px 18px;
+  margin: 16px 0;
+  font-size: 13px;
+  color: var(--mid);
+  line-height: 1.7;
+  font-style: italic;
+}
+.callout strong { font-style: normal; font-weight: 600; color: var(--ink); }
+
+/* ── ACKNOWLEDGE STRIP ── */
+.ack-strip {
+  background: var(--warm);
+  border-top: 1px solid var(--border);
+  padding: 20px 36px;
+}
+@media(max-width:600px){ .ack-strip{padding:18px 20px;} }
+.ack-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  cursor: pointer;
+  font-size: 13.5px;
+  font-weight: 300;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.ack-label input[type="checkbox"] {
+  accent-color: var(--gold);
+  width: 18px; height: 18px;
+  min-width: 18px;
+  margin-top: 2px;
+  cursor: pointer;
+}
+
+/* ── FINAL SIGNATURE PAGE ── */
+#sign-page {
+  display: none;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+#sign-page.visible { display: block; }
+
+.sign-header {
+  background: var(--ink);
+  padding: 28px 36px;
+  border-bottom: 2px solid var(--gold);
+}
+.sign-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--cream);
+  margin-bottom: 6px;
+}
+.sign-header p { font-size: 13px; color: var(--muted); font-weight: 300; }
+
+.sign-body { padding: 32px 36px; }
+@media(max-width:600px){ .sign-body{padding:24px 20px;} .sign-header{padding:24px 20px;} }
+
+.progress-summary {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+.prog-chip {
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 20px;
+  background: var(--green-bg);
+  color: var(--green);
+  border: 1px solid var(--green);
+  font-weight: 500;
+}
+
+.sign-field { margin-bottom: 18px; }
+.sign-field label { display: block; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--mid); margin-bottom: 6px; font-weight: 500; }
+.sign-field input {
+  width: 100%;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 11px 14px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color .2s;
+}
+.sign-field input:focus { border-color: var(--gold); }
+.sign-field input.invalid { border-color: var(--alert); }
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media(max-width:480px){ .g2{grid-template-columns:1fr;} }
+
+.sig-wrap { background: var(--cream); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+.sig-top { background: var(--warm); padding: 9px 16px; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--mid); font-weight: 500; }
+canvas#sigPad { display: block; width: 100%; height: 150px; cursor: crosshair; touch-action: none; }
+.sig-bar { display: flex; justify-content: flex-end; padding: 7px 12px; border-top: 1px solid var(--border); }
+.btn-clr { font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: var(--mid); background: none; border: 1px solid var(--border); padding: 5px 14px; border-radius: 2px; cursor: pointer; font-family: 'Outfit', sans-serif; transition: all .2s; }
+.btn-clr:hover { border-color: var(--gold); color: var(--gold); }
+
+.legal-note { background: var(--parchment); border: 1px solid var(--border); border-radius: 3px; padding: 14px 18px; font-size: 12px; color: var(--mid); line-height: 1.7; font-style: italic; margin: 20px 0; }
+
+.btn-submit {
+  width: 100%;
+  background: var(--gold);
+  color: var(--white);
+  border: none;
+  padding: 16px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background .2s;
+  margin-top: 8px;
+}
+.btn-submit:hover { background: var(--mid); }
+.btn-submit:disabled { background: var(--border); cursor: not-allowed; }
+
+/* ── NOT-YET banner ── */
+#pending-banner {
+  background: var(--alert-bg);
+  border: 1px solid var(--alert);
+  border-radius: 3px;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: var(--alert);
+  margin-bottom: 20px;
+  display: none;
+}
+#pending-banner.visible { display: block; }
+
+/* ── SUCCESS ── */
+#success { display: none; text-align: center; padding: 60px 20px; }
+.s-icon { width: 72px; height: 72px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 30px; color: #fff; }
+.s-title { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 400; margin-bottom: 14px; }
+.s-body { font-size: 14px; color: var(--mid); line-height: 1.8; font-weight: 300; max-width: 460px; margin: 0 auto 24px; }
+.email-pill { display: inline-block; background: var(--ink); color: var(--gold2); padding: 14px 28px; border-radius: 3px; font-size: 15px; margin-bottom: 28px; }
+.next-box { background: var(--warm); border: 1px solid var(--border); border-radius: 4px; padding: 22px 26px; max-width: 480px; margin: 0 auto; text-align: left; }
+.next-box h4 { font-size: 10px; letter-spacing: .25em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+.next-box li { list-style: none; font-size: 13px; color: var(--ink); padding-left: 16px; position: relative; margin-bottom: 10px; font-weight: 300; line-height: 1.6; }
+.next-box li::before { content: '→'; position: absolute; left: 0; color: var(--gold); }
+</style>
+</head>
+<body>
+
+<!-- ══════════ HERO ══════════ -->
+<div class="hero" id="hero">
+  <div class="hero-inner">
+    <div class="hero-rule"></div>
+    <div class="hero-eyebrow">Independent Contractor Handbook</div>
+    <h1 class="hero-title">Cio Bela<br><em>Brand Standards</em></h1>
+    <p class="hero-sub">Multi Service Salon, Spa &amp; Wellness Center LLC<br>27327 Robinson Rd., Suites 3 &amp; 4 · Oak Ridge North, TX 77385</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><div class="val">6</div><div class="lbl">Sections</div></div>
+      <div class="hero-meta-item"><div class="val">2026</div><div class="lbl">Edition</div></div>
+      <div class="hero-meta-item"><div class="val">TX</div><div class="lbl">Jurisdiction</div></div>
+    </div>
+    <a href="#handbook" class="hero-btn" onclick="showNav()">Begin Handbook &darr;</a>
+    <div class="hero-rule2"></div>
+    <div class="hero-addr">A signed copy of this handbook is required before your first working day.</div>
+  </div>
+</div>
+
+<!-- ══════════ STICKY NAV ══════════ -->
+<div id="sticky-nav">
+  <div class="nav-inner">
+    <div class="nav-brand">Cio Bela</div>
+    <div class="nav-pills" id="nav-pills"></div>
+  </div>
+</div>
+
+<!-- ══════════ HANDBOOK ══════════ -->
+<div class="main" id="handbook" style="padding-top:32px;">
+
+<!-- ─── SECTION 1: PROFESSIONAL APPEARANCE ─── -->
+<div class="section" id="sec-1">
+  <div class="section-header" onclick="toggleSection(1)">
+    <div class="sh-left">
+      <div class="sh-num">01</div>
+      <div class="sh-info">
+        <div class="sh-tag">Section One</div>
+        <div class="sh-title">Professional Appearance</div>
+      </div>
+    </div>
+    <div class="sh-right">
+      <div class="sh-badge" id="badge-1">Not yet reviewed</div>
+      <div class="sh-arrow">▾</div>
+    </div>
+  </div>
+  <div class="section-body" id="body-1">
+    <div class="section-content">
+
+      <div class="callout"><strong>Our philosophy:</strong> As a 1099 independent contractor, Cio Bela does not dictate your wardrobe. However, your appearance is a direct reflection of the brand experience our clients expect. We ask that every contractor uphold a standard of professional presentation that is consistent with Cio Bela's Warm Minimalism aesthetic.</div>
+
+      <div class="rule-block">
+        <div class="rule-title">The Standard</div>
+        <div class="rule-body">
+          Contractors are expected to present themselves in a manner that is <strong>clean, polished, and client-ready</strong> at all times while on Cio Bela premises. Your appearance communicates your brand — and while on our floor, it communicates ours as well.<br><br>
+          Think refined, intentional, and professional. Cio Bela's aesthetic is <strong>Warm Minimalism</strong> — earthy tones, clean lines, understated elegance. Your personal style should complement — not contradict — this environment.
+        </div>
+        <div class="do-dont">
+          <div class="do-col">
+            <div class="dd-head">✓ Encouraged</div>
+            <div class="dd-item">Neutral tones, earth tones, or all-black attire</div>
+            <div class="dd-item">Clean, pressed, wrinkle-free clothing</div>
+            <div class="dd-item">Closed-toe shoes (sanitation &amp; safety)</div>
+            <div class="dd-item">Hair styled and away from the face while working</div>
+            <div class="dd-item">Minimal, intentional accessories</div>
+            <div class="dd-item">Natural or polished nails that showcase your craft</div>
+          </div>
+          <div class="dont-col">
+            <div class="dd-head">✕ Not Appropriate</div>
+            <div class="dd-item">Visibly dirty, torn, or stained clothing</div>
+            <div class="dd-item">Graphic tees with offensive or controversial content</div>
+            <div class="dd-item">Open-toe shoes or flip-flops during service</div>
+            <div class="dd-item">Strong perfume or cologne (clients may have sensitivities)</div>
+            <div class="dd-item">Clothing that creates a distraction from the service environment</div>
+            <div class="dd-item">Unkempt, unwashed, or unstyled appearance</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rule-block">
+        <div class="rule-title">Personal Hygiene</div>
+        <div class="rule-body">
+          Given the close-proximity nature of nail services, personal hygiene is non-negotiable. Contractors must arrive <strong>clean, odor-neutral, and client-ready</strong>. This includes clean hands and properly maintained nails. Arriving in active workout gear or immediately after the gym without freshening up is not appropriate for a client-facing environment.
+        </div>
+      </div>
+
+    </div>
+    <div class="ack-strip">
+      <label class="ack-label" onclick="ackSection(1, this)">
+        <input type="checkbox" id="ack-1">
+        <span>I have read and understand the <strong>Professional Appearance Standards</strong>. I agree to maintain a professional presentation that upholds Cio Bela's Warm Minimalism aesthetic while on premises.</span>
+      </label>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SECTION 2: STATION SETUP & CLEANLINESS ─── -->
+<div class="section" id="sec-2">
+  <div class="section-header" onclick="toggleSection(2)">
+    <div class="sh-left">
+      <div class="sh-num">02</div>
+      <div class="sh-info">
+        <div class="sh-tag">Section Two</div>
+        <div class="sh-title">Station Setup &amp; Cleanliness</div>
+      </div>
+    </div>
+    <div class="sh-right">
+      <div class="sh-badge" id="badge-2">Not yet reviewed</div>
+      <div class="sh-arrow">▾</div>
+    </div>
+  </div>
+  <div class="section-body" id="body-2">
+    <div class="section-content">
+
+      <div class="callout"><strong>Your station is your business.</strong> How you keep your space tells every client — and every passing eye — exactly who you are as a professional. Cio Bela's environment is intentionally curated. Your station should feel like it belongs here.</div>
+
+      <div class="rule-block">
+        <div class="rule-title">Station Presentation Standard</div>
+        <div class="rule-body">
+          Your station must be <strong>clean, organized, and visually cohesive</strong> at all times — before, during, and after each client. Products should be neatly arranged. Surfaces should be free of dust, product buildup, and clutter. Your workspace is visible to every client who walks through the door, not just the client in your chair.
+        </div>
+        <div class="do-dont">
+          <div class="do-col">
+            <div class="dd-head">✓ Station Must-Haves</div>
+            <div class="dd-item">Clean, lint-free table surface at all times</div>
+            <div class="dd-item">Products stored neatly (not sprawled across the surface)</div>
+            <div class="dd-item">Implements in sealed storage between clients</div>
+            <div class="dd-item">A clean client cushion/armrest for each appointment</div>
+            <div class="dd-item">Trash emptied before it overflows</div>
+            <div class="dd-item">No personal food or beverages on the service surface</div>
+          </div>
+          <div class="dont-col">
+            <div class="dd-head">✕ Never Acceptable</div>
+            <div class="dd-item">Dirty implements left on the table between clients</div>
+            <div class="dd-item">Product bottles with dirty, crusted caps on display</div>
+            <div class="dd-item">Excessive personal items taking up service space</div>
+            <div class="dd-item">Leaving a messy station at end of shift</div>
+            <div class="dd-item">Using another contractor's supplies without permission</div>
+            <div class="dd-item">Storing personal belongings in common areas</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rule-block">
+        <div class="rule-title">Sanitation Protocol</div>
+        <div class="rule-body">
+          Per TDLR regulations and your Contractor Agreement, <strong>all implements must be properly disinfected between every client</strong> using EPA-registered, TDLR-approved disinfectants. Single-use items (files, buffers, orangewood sticks) must be discarded after each client — never reused. Implements must be stored in a sealed container or UV sterilization case. <br><br>
+          Your station disinfection is your sole responsibility. TDLR fines resulting from sanitation violations at your station will be charged back to you per your Contractor Agreement.
+        </div>
+      </div>
+
+      <div class="rule-block">
+        <div class="rule-title">End-of-Shift Responsibility</div>
+        <div class="rule-body">
+          Before leaving for the day, your station must be <strong>wiped down, disinfected, organized, and ready for your next appointment</strong>. This means: all product bottles closed and stored, surface cleaned, trash emptied, implements properly stored, floor around your station swept if needed. Leaving a messy station overnight is not permitted and may trigger the self-help cleaning charge outlined in your Contractor Agreement.
+        </div>
+      </div>
+
+    </div>
+    <div class="ack-strip">
+      <label class="ack-label" onclick="ackSection(2, this)">
+        <input type="checkbox" id="ack-2">
+        <span>I have read and understand the <strong>Station Setup &amp; Cleanliness Standards</strong>. I accept sole responsibility for my station's appearance and sanitation, and understand that violations may result in professional cleaning charges billed to my card on file.</span>
+      </label>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SECTION 3: MUSIC & AMBIANCE ─── -->
+<div class="section" id="sec-3">
+  <div class="section-header" onclick="toggleSection(3)">
+    <div class="sh-left">
+      <div class="sh-num">03</div>
+      <div class="sh-info">
+        <div class="sh-tag">Section Three</div>
+        <div class="sh-title">Music &amp; Ambiance</div>
+      </div>
+    </div>
+    <div class="sh-right">
+      <div class="sh-badge" id="badge-3">Not yet reviewed</div>
+      <div class="sh-arrow">▾</div>
+    </div>
+  </div>
+  <div class="section-body" id="body-3">
+    <div class="section-content">
+
+      <div class="callout"><strong>The Cio Bela ambiance is intentional.</strong> Our clients come here to decompress, feel beautiful, and escape. Every sensory detail — including sound — contributes to that experience. What plays in this space matters.</div>
+
+      <div class="rule-block">
+        <div class="rule-title">Salon Background Music</div>
+        <div class="rule-body">
+          Cio Bela curates the salon's background music to maintain a consistent, upscale atmosphere. The general salon soundtrack is managed by Salon Management and reflects our brand aesthetic — think ambient, R&amp;B, neo-soul, soft jazz, or curated lounge playlists.<br><br>
+          Contractors <strong>may play their own music at their station via personal earbuds or low-volume personal speakers</strong>, provided it does not conflict with or overpower the salon's background music or create an audible distraction for neighboring stations or clients.
+        </div>
+        <div class="do-dont">
+          <div class="do-col">
+            <div class="dd-head">✓ Acceptable</div>
+            <div class="dd-item">Personal earbuds (one ear only while serving clients)</div>
+            <div class="dd-item">Low-volume ambient or background music at your station</div>
+            <div class="dd-item">Music that complements a calm, upscale environment</div>
+            <div class="dd-item">Checking with your client about their music preference</div>
+          </div>
+          <div class="dont-col">
+            <div class="dd-head">✕ Not Permitted</div>
+            <div class="dd-item">Playing explicit lyrics at audible volume in the salon</div>
+            <div class="dd-item">Music that overpowers the salon's background atmosphere</div>
+            <div class="dd-item">Aggressive, highly political, or controversial audio content</div>
+            <div class="dd-item">Video or podcast content played aloud at your station</div>
+            <div class="dd-item">Both earbuds in while serving a client (safety &amp; engagement)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rule-block">
+        <div class="rule-title">Volume &amp; Noise</div>
+        <div class="rule-body">
+          Conversation volume should be kept at a level that does not carry across the salon floor. Laughing, speaking loudly, or extended personal phone calls in the middle of the salon disrupts the environment. Phone calls should be taken briefly and, when possible, stepped away from the main floor. <strong>FaceTime or video calls with audio are not permitted in the service area.</strong>
+        </div>
+      </div>
+
+      <div class="rule-block">
+        <div class="rule-title">Television &amp; Video</div>
+        <div class="rule-body">
+          Any television or shared screen content within the salon is managed by Salon Management. Contractors may not connect personal devices to shared screens or salon audio systems without explicit management approval.
+        </div>
+      </div>
+
+    </div>
+    <div class="ack-strip">
+      <label class="ack-label" onclick="ackSection(3, this)">
+        <input type="checkbox" id="ack-3">
+        <span>I have read and understand the <strong>Music &amp; Ambiance Standards</strong>. I agree to maintain a sound environment at my station that is consistent with Cio Bela's upscale, calm atmosphere.</span>
+      </label>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SECTION 4: CLIENT COMMUNICATION ─── -->
+<div class="section" id="sec-4">
+  <div class="section-header" onclick="toggleSection(4)">
+    <div class="sh-left">
+      <div class="sh-num">04</div>
+      <div class="sh-info">
+        <div class="sh-tag">Section Four</div>
+        <div class="sh-title">Client Communication Standards</div>
+      </div>
+    </div>
+    <div class="sh-right">
+      <div class="sh-badge" id="badge-4">Not yet reviewed</div>
+      <div class="sh-arrow">▾</div>
+    </div>
+  </div>
+  <div class="section-body" id="body-4">
+    <div class="section-content">
+
+      <div class="callout"><strong>Every client interaction is a brand touchpoint.</strong> How you greet, communicate with, and part from a client shapes their entire memory of Cio Bela. You are the experience.</div>
+
+      <div class="rule-block">
+        <div class="rule-title">Greeting &amp; First Impressions</div>
+        <div class="rule-body">
+          All clients entering the salon should be acknowledged within <strong>30 seconds</strong> — even if you are mid-service. A simple "Welcome in, I'll be right with you!" goes a long way. Clients should never stand at the door feeling ignored. If you are not the contractor they are booked with, a warm acknowledgment and direction to the correct artist is still expected.
+        </div>
+      </div>
+
+      <div class="rule-block">
+        <div class="rule-title">During Service</div>
+        <div class="rule-body">
+          Your client's time in your chair is sacred. Give them your <strong>full attention and genuine presence</strong>. Limit personal phone use to essential communication only during service. Extended personal texting or scrolling social media while a client is in your chair is unprofessional and reflects poorly on Cio Bela as a whole.<br><br>
+          Conversation should be warm, professional, and client-led. Follow their cues — some clients want to chat, some want to relax quietly. Both are valid. Avoid discussing controversial topics including politics, religion, or other contractors' personal business.
+        </div>
+        <div class="do-dont">
+          <div class="do-col">
+            <div class="dd-head">✓ Professional Communication</div>
+            <div class="dd-item">Warm, genuine greeting for every client</div>
+            <div class="dd-item">Clear consultation before every service</div>
+            <div class="dd-item">Honest expectations about timing and outcomes</div>
+            <div class="dd-item">Proactive communication if running behind</div>
+            <div class="dd-item">A warm send-off and rebooking prompt</div>
+          </div>
+          <div class="dont-col">
+            <div class="dd-head">✕ Unprofessional Communication</div>
+            <div class="dd-item">Ignoring or making clients wait without acknowledgment</div>
+            <div class="dd-item">Discussing other contractors' personal matters</div>
+            <div class="dd-item">Complaining about salon management to clients</div>
+            <div class="dd-item">Arguing with or dismissing a client's concerns</div>
+            <div class="dd-item">Soliciting clients to follow you to another location</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rule-block">
+        <div class="rule-title">Conflict Resolution</div>
+        <div class="rule-body">
+          If a client is unhappy with their service, <strong>remain calm, listen fully, and do not become defensive</strong>. Offer what you can within reason. As an independent contractor, the resolution of service disputes is between you and your client directly — your clients pay you, not the salon. If you need guidance or support in handling a difficult situation, management is available to assist. Maintain professionalism at all times regardless of the outcome.
+        </div>
+      </div>
+
+      <div class="rule-block">
+        <div class="rule-title">Client Privacy</div>
+        <div class="rule-body">
+          Information shared by clients during their appointment — personal, medical, or otherwise — is <strong>confidential</strong>. Do not share, repeat, or discuss client information with other contractors, on social media, or in any public forum. Violations of client privacy may result in immediate termination of your contractor agreement.
+        </div>
+      </div>
+
+    </div>
+    <div class="ack-strip">
+      <label class="ack-label" onclick="ackSection(4, this)">
+        <input type="checkbox" id="ack-4">
+        <span>I have read and understand the <strong>Client Communication Standards</strong>. I agree to provide professional, respectful, and brand-consistent client interactions at all times and to maintain full client confidentiality.</span>
+      </label>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SECTION 5: SOCIAL MEDIA & PHOTOGRAPHY ─── -->
+<div class="section" id="sec-5">
+  <div class="section-header" onclick="toggleSection(5)">
+    <div class="sh-left">
+      <div class="sh-num">05</div>
+      <div class="sh-info">
+        <div class="sh-tag">Section Five</div>
+        <div class="sh-title">Social Media &amp; Photography</div>
+      </div>
+    </div>
+    <div class="sh-right">
+      <div class="sh-badge" id="badge-5">Not yet reviewed</div>
+      <div class="sh-arrow">▾</div>
+    </div>
+  </div>
+  <div class="section-body" id="body-5">
+    <div class="section-content">
+
+      <div class="callout"><strong>Your content is your portfolio.</strong> Great content shot at Cio Bela benefits both of us — it builds your following and elevates our brand. We encourage you to share your work. We just ask that you do it with intention.</div>
+
+      <div class="rule-block">
+        <div class="rule-title">Photography of Your Work</div>
+        <div class="rule-body">
+          You are encouraged to photograph and share your completed nail work on your personal social media. When posting work done at Cio Bela, we ask that you <strong>tag @CioBelaSalons</strong> (or the official handle provided by management) when content is captured on our premises or prominently features our space. This is not mandatory, but it is appreciated and mutually beneficial.
+        </div>
+      </div>
+
+      <div class="rule-block">
+        <div class="rule-title">Photography of Clients</div>
+        <div class="rule-body">
+          You must have <strong>explicit verbal or written consent from any client before posting their image</strong> — including photos of just their hands — to any public-facing social media account. Do not post content that reveals a client's identity without their permission. A simple "Is it okay if I share this on my Instagram?" before posting is required.
+        </div>
+      </div>
+
+      <div class="rule-block">
+        <div class="rule-title">Cio Bela Branding on Social Media</div>
+        <div class="rule-body">
+          While contracted, you may identify yourself as a nail artist <strong>"at Cio Bela"</strong> in your social media bios and content. Upon termination or resignation of your contractor agreement, <strong>all references to Cio Bela must be removed from your profile, bio, and highlights within 24 hours</strong>, as outlined in your Contractor Agreement. You may retain portfolio content of your completed work.
+        </div>
+      </div>
+
+      <div class="rule-block">
+        <div class="rule-title">Content Standards</div>
+        <div class="rule-body">
+          Any content that features the Cio Bela space, brand, or name — whether in a tag, caption, or visual — must reflect our brand positively. Do not post content from the salon that is <strong>politically divisive, sexually explicit, discriminatory, or that portrays Cio Bela or its staff in a negative light</strong>. Such posts are grounds for immediate review of your contractor status.
+        </div>
+        <div class="do-dont">
+          <div class="do-col">
+            <div class="dd-head">✓ Great Content</div>
+            <div class="dd-item">Before &amp; after nail sets with client consent</div>
+            <div class="dd-item">Salon aesthetic, your station, product flat-lays</div>
+            <div class="dd-item">Tagging Cio Bela on work done in our space</div>
+            <div class="dd-item">Behind-the-scenes of your craft (process videos)</div>
+            <div class="dd-item">Booking links through the salon's official platform</div>
+          </div>
+          <div class="dont-col">
+            <div class="dd-head">✕ Not Permitted</div>
+            <div class="dd-item">Client photos without consent</div>
+            <div class="dd-item">Negative posts about Cio Bela, management, or other contractors</div>
+            <div class="dd-item">Directing followers to book outside the salon's system</div>
+            <div class="dd-item">Using Cio Bela's branding after contract termination</div>
+            <div class="dd-item">Sharing any client's personal information publicly</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="ack-strip">
+      <label class="ack-label" onclick="ackSection(5, this)">
+        <input type="checkbox" id="ack-5">
+        <span>I have read and understand the <strong>Social Media &amp; Photography Standards</strong>. I agree to obtain client consent before posting their image, to use Cio Bela's branding responsibly, and to remove all Cio Bela references from my profiles within 24 hours of contract termination.</span>
+      </label>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SECTION 6: GUEST & VISITOR POLICY ─── -->
+<div class="section" id="sec-6">
+  <div class="section-header" onclick="toggleSection(6)">
+    <div class="sh-left">
+      <div class="sh-num">06</div>
+      <div class="sh-info">
+        <div class="sh-tag">Section Six</div>
+        <div class="sh-title">Guest &amp; Visitor Policy</div>
+      </div>
+    </div>
+    <div class="sh-right">
+      <div class="sh-badge" id="badge-6">Not yet reviewed</div>
+      <div class="sh-arrow">▾</div>
+    </div>
+  </div>
+  <div class="section-body" id="body-6">
+    <div class="section-content">
+
+      <div class="callout"><strong>Cio Bela is a professional service environment.</strong> Every person on the floor — whether a client, contractor, or visitor — contributes to the atmosphere. Our guest policy exists to protect that experience for everyone.</div>
+
+      <div class="rule-block">
+        <div class="rule-title">Personal Visitors</div>
+        <div class="rule-body">
+          Contractors may receive brief personal visits from friends or family, provided the visit does not disrupt the salon environment, take up client seating, or extend beyond a casual check-in. <strong>Personal visitors may not linger at your station</strong> while you are serving a client. Lengthy personal visits during working hours are not appropriate in a professional salon setting.
+        </div>
+      </div>
+
+      <div class="rule-block">
+        <div class="rule-title">Children on Premises</div>
+        <div class="rule-body">
+          Children are welcome as clients or when accompanied by a parent or guardian receiving a service. <strong>Contractors may not bring children to the salon as a childcare arrangement</strong>. Children left unattended in the waiting area or roaming the salon floor is not permitted and poses a safety risk in a chemical-use environment.
+        </div>
+      </div>
+
+      <div class="rule-block">
+        <div class="rule-title">Non-Contracted Individuals Performing Services</div>
+        <div class="rule-body">
+          Only licensed, contracted individuals may perform services within Cio Bela. <strong>No contractor may allow an unlicensed individual to perform any service at their station</strong> — including practice, training sessions, or informal demonstrations — without prior written approval from Salon Management. This is a TDLR compliance requirement and a non-negotiable condition of your contract.
+        </div>
+      </div>
+
+    </div>
+    <div class="ack-strip">
+      <label class="ack-label" onclick="ackSection(6, this)">
+        <input type="checkbox" id="ack-6">
+        <span>I have read and understand the <strong>Guest &amp; Visitor Policy</strong>. I agree not to allow unauthorized individuals to perform services at my station and to manage personal visitors appropriately.</span>
+      </label>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SIGNATURE PAGE ══════════ -->
+<div id="sign-page">
+  <div class="sign-header">
+    <h2>Acknowledgment &amp; Signature</h2>
+    <p>All six sections must be reviewed and acknowledged before signing. Your signature confirms you have read, understood, and agree to uphold Cio Bela's Brand Standards as an independent contractor.</p>
+  </div>
+  <div class="sign-body">
+
+    <div id="pending-banner">
+      <strong>⚠ Not all sections acknowledged.</strong> Please scroll up and check the acknowledgment box at the bottom of every section before signing.
+    </div>
+
+    <div class="progress-summary" id="progress-summary"></div>
+
+    <div class="g2">
+      <div class="sign-field">
+        <label>Full Legal Name <span style="color:var(--alert)">*</span></label>
+        <input type="text" id="sig-name" placeholder="As it appears on your license">
+      </div>
+      <div class="sign-field">
+        <label>Phone Number <span style="color:var(--alert)">*</span></label>
+        <input type="tel" id="sig-phone" placeholder="(xxx) xxx-xxxx">
+      </div>
+    </div>
+    <div class="g2">
+      <div class="sign-field">
+        <label>Email Address <span style="color:var(--alert)">*</span></label>
+        <input type="email" id="sig-email" placeholder="your@email.com">
+      </div>
+      <div class="sign-field">
+        <label>TX License Number <span style="color:var(--alert)">*</span></label>
+        <input type="text" id="sig-license" placeholder="TX-XXXXXXXX">
+      </div>
+    </div>
+    <div class="sign-field">
+      <label>Date of Signing</label>
+      <input type="text" id="sig-date" readonly>
+    </div>
+
+    <div class="sig-wrap" style="margin-top:8px;">
+      <div class="sig-top">Draw Your Signature</div>
+      <canvas id="sigPad"></canvas>
+      <div class="sig-bar"><button class="btn-clr" onclick="clearSig()">Clear</button></div>
+    </div>
+
+    <div class="legal-note">
+      By signing below, I confirm that I have read, reviewed, and acknowledged all six sections of the Cio Bela Brand Standards Handbook. I agree to uphold these standards as a condition of my Independent Contractor Agreement. This electronic signature is legally binding under the E-SIGN Act and the Texas Uniform Electronic Transactions Act (TUETA).
+    </div>
+
+    <button class="btn-submit" id="submit-btn" onclick="submitHandbook()">Sign, Submit &amp; Download PDF</button>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div id="success">
+  <div class="s-icon">✓</div>
+  <h2 class="s-title">Handbook Signed</h2>
+  <p class="s-body">Your signed Brand Standards Handbook has been downloaded. Please email it to Cio Bela to complete your onboarding.</p>
+  <div class="email-pill">ciobela@email.com</div>
+  <div class="next-box">
+    <h4>Next Steps</h4>
+    <ul>
+      <li>Email the PDF to <strong>ciobela@email.com</strong> — subject: <em>"[Your Name] — Brand Standards"</em></li>
+      <li>Keep a copy for your own records</li>
+      <li>Questions about any standard? Reach out to management before your first day</li>
+      <li>Your onboarding packet is now complete — welcome to Cio Bela!</li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+  const TOTAL_SECS = 6;
+  const sectionNames = ['','Professional Appearance','Station Setup & Cleanliness','Music & Ambiance','Client Communication','Social Media & Photography','Guest & Visitor Policy'];
+  let acked = {};
+  let hasSig = false, drawing = false;
+  let sc, sx;
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  const timeStr = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',timeZoneName:'short'});
+
+  window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('sig-date').value = dateStr;
+    buildNav();
+    initSig();
+  });
+
+  function showNav() {
+    document.getElementById('sticky-nav').classList.add('visible');
+  }
+
+  // Intersection observer to show nav on scroll
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (!e.isIntersecting) showNav(); });
+  }, { threshold: 0.1 });
+  window.addEventListener('load', () => observer.observe(document.getElementById('hero')));
+
+  function buildNav() {
+    const wrap = document.getElementById('nav-pills');
+    for (let i = 1; i <= TOTAL_SECS; i++) {
+      const pill = document.createElement('div');
+      pill.className = 'nav-pill';
+      pill.id = 'nav-' + i;
+      pill.textContent = '0' + i;
+      pill.onclick = () => { toggleSection(i); document.getElementById('sec-'+i).scrollIntoView({behavior:'smooth',block:'start'}); };
+      wrap.appendChild(pill);
+    }
+  }
+
+  function toggleSection(n) {
+    var header = document.querySelector('#sec-' + n + ' .section-header');
+    var body = document.getElementById('body-' + n);
+    var isOpen = body.classList.contains('open');
+    // close all
+    for (let i = 1; i <= TOTAL_SECS; i++) {
+      document.getElementById('body-' + i).classList.remove('open');
+      var h = document.querySelector('#sec-' + i + ' .section-header');
+      h.classList.remove('open');
+    }
+    if (!isOpen) {
+      body.classList.add('open');
+      header.classList.add('open');
+      // Scroll to top of the section header
+      setTimeout(function() {
+        document.getElementById('sec-' + n).scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+    }
+  }
+
+  function ackSection(n, labelEl) {
+    const cb = document.getElementById('ack-' + n);
+    setTimeout(() => {
+      if (cb.checked) {
+        acked[n] = true;
+        const badge = document.getElementById('badge-' + n);
+        badge.textContent = 'Acknowledged ✓';
+        const header = document.querySelector('#sec-' + n + ' .section-header');
+        header.classList.add('done');
+        const navPill = document.getElementById('nav-' + n);
+        if (navPill) navPill.classList.add('done');
+        checkAllAcked();
+      } else {
+        delete acked[n];
+        document.getElementById('badge-' + n).textContent = 'Not yet reviewed';
+        document.querySelector('#sec-' + n + ' .section-header').classList.remove('done');
+        const navPill = document.getElementById('nav-' + n);
+        if (navPill) navPill.classList.remove('done');
+        document.getElementById('sign-page').classList.remove('visible');
+      }
+    }, 0);
+  }
+
+  function checkAllAcked() {
+    if (Object.keys(acked).length === TOTAL_SECS) {
+      const sp = document.getElementById('sign-page');
+      sp.classList.add('visible');
+      sp.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      buildProgressSummary();
+    }
+  }
+
+  function buildProgressSummary() {
+    const wrap = document.getElementById('progress-summary');
+    wrap.innerHTML = '';
+    for (let i = 1; i <= TOTAL_SECS; i++) {
+      const chip = document.createElement('div');
+      chip.className = 'prog-chip';
+      chip.textContent = '✓ ' + sectionNames[i];
+      wrap.appendChild(chip);
+    }
+  }
+
+  // ── SIGNATURE ──
+  function initSig() {
+    sc = document.getElementById('sigPad');
+    sx = sc.getContext('2d');
+    const ratio = window.devicePixelRatio || 1;
+    const r = sc.getBoundingClientRect();
+    sc.width = r.width * ratio; sc.height = 150 * ratio;
+    sx.scale(ratio, ratio);
+    sx.strokeStyle = '#16120E'; sx.lineWidth = 2.2; sx.lineCap = 'round'; sx.lineJoin = 'round';
+    const pos = e => { const rect = sc.getBoundingClientRect(); const s = e.touches?e.touches[0]:e; return{x:s.clientX-rect.left,y:s.clientY-rect.top}; };
+    sc.addEventListener('mousedown', e=>{drawing=true;const p=pos(e);sx.beginPath();sx.moveTo(p.x,p.y);});
+    sc.addEventListener('mousemove', e=>{if(!drawing)return;hasSig=true;const p=pos(e);sx.lineTo(p.x,p.y);sx.stroke();});
+    sc.addEventListener('mouseup', ()=>drawing=false);
+    sc.addEventListener('mouseleave', ()=>drawing=false);
+    sc.addEventListener('touchstart', e=>{e.preventDefault();drawing=true;const p=pos(e);sx.beginPath();sx.moveTo(p.x,p.y);},{passive:false});
+    sc.addEventListener('touchmove', e=>{e.preventDefault();if(!drawing)return;hasSig=true;const p=pos(e);sx.lineTo(p.x,p.y);sx.stroke();},{passive:false});
+    sc.addEventListener('touchend', ()=>drawing=false);
+  }
+  function clearSig(){sx.clearRect(0,0,sc.width,sc.height);hasSig=false;}
+
+  // ── SUBMIT ──
+  async function submitHandbook() {
+    // check all acked
+    if (Object.keys(acked).length < TOTAL_SECS) {
+      document.getElementById('pending-banner').classList.add('visible');
+      return;
+    }
+    document.getElementById('pending-banner').classList.remove('visible');
+
+    const nameEl = document.getElementById('sig-name');
+    const phoneEl = document.getElementById('sig-phone');
+    const emailEl = document.getElementById('sig-email');
+    const licEl = document.getElementById('sig-license');
+    let ok = true;
+    [nameEl,phoneEl,emailEl,licEl].forEach(el => {
+      if (!el.value.trim()) { el.classList.add('invalid'); ok = false; }
+      else el.classList.remove('invalid');
+    });
+    if (!ok) { alert('Please complete all required fields.'); return; }
+    if (!hasSig) { alert('Please draw your signature before submitting.'); return; }
+
+    const sigImg = sc.toDataURL('image/png');
+    const name = nameEl.value.trim();
+    const phone = phoneEl.value.trim();
+    const email = emailEl.value.trim();
+    const license = licEl.value.trim();
+
+    try {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({orientation:'portrait',unit:'mm',format:'letter'});
+      const W=215.9, H=279.4, M=16, CW=W-M*2;
+      const gold=[176,141,87], ink=[22,18,14], mid=[122,106,85], warm=[237,228,213],
+            cream=[246,241,235], green=[47,92,66], white=[255,255,255], red=[124,59,32];
+
+      // ── COVER PAGE ──
+      doc.setFillColor(...ink); doc.rect(0,0,W,H,'F');
+      // grid overlay
+      doc.setDrawColor(176,141,87); doc.setLineWidth(0.08);
+      for(let gx=0;gx<W;gx+=20) doc.line(gx,0,gx,H);
+      for(let gy=0;gy<H;gy+=20) doc.line(0,gy,W,gy);
+
+      // center box
+      doc.setFillColor(22,18,14); doc.rect(20,40,W-40,H-80,'F');
+      doc.setDrawColor(...gold); doc.setLineWidth(0.5);
+      doc.rect(22,42,W-44,H-84);
+
+      doc.setDrawColor(...gold); doc.setLineWidth(0.4);
+      doc.line(M+20, 70, W-M-20, 70);
+
+      doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.setTextColor(...gold);
+      doc.text('INDEPENDENT CONTRACTOR HANDBOOK', W/2, 64, {align:'center'});
+      doc.text('EDITION 2026', W/2, 68, {align:'center'});
+
+      doc.setFontSize(32); doc.setFont('helvetica','bold'); doc.setTextColor(...cream);
+      doc.text('CIO BELA', W/2, 92, {align:'center'});
+      doc.setFontSize(22); doc.setFont('helvetica','normal');
+      doc.setTextColor(...gold);
+      doc.text('Brand Standards', W/2, 105, {align:'center'});
+
+      doc.line(M+20, 113, W-M-20, 113);
+
+      doc.setFontSize(8.5); doc.setFont('helvetica','normal'); doc.setTextColor(160,140,110);
+      doc.text('Multi Service Salon, Spa & Wellness Center LLC', W/2, 122, {align:'center'});
+      doc.text('27327 Robinson Rd., Suites 3 & 4  ·  Oak Ridge North, TX 77385', W/2, 129, {align:'center'});
+
+      // Sections list
+      let sy = 148;
+      sectionNames.slice(1).forEach((s,i) => {
+        doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.setTextColor(...gold);
+        doc.text('0'+(i+1), M+30, sy);
+        doc.setTextColor(180,165,140);
+        doc.text(s, M+40, sy);
+        sy += 9;
+      });
+
+      // Contractor info on cover
+      doc.setFillColor(30,25,18); doc.rect(22, H-92, W-44, 42, 'F');
+      doc.setDrawColor(...gold); doc.setLineWidth(0.3); doc.rect(22, H-92, W-44, 42);
+      const infoRows = [['CONTRACTOR',name],['LICENSE #',license],['SIGNED',dateStr]];
+      let iy = H-84;
+      infoRows.forEach(([lbl,val]) => {
+        doc.setFontSize(6.5); doc.setFont('helvetica','bold'); doc.setTextColor(...gold); doc.text(lbl, 30, iy);
+        doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(...cream); doc.text(val, 70, iy);
+        iy += 10;
+      });
+
+      doc.setFontSize(6.5); doc.setFont('helvetica','normal'); doc.setTextColor(100,88,70);
+      doc.text('A signed copy of this handbook is required before your first working day.', W/2, H-36, {align:'center'});
+
+      // ── CONTENT PAGES ──
+      const sections = [
+        {
+          num:'01', title:'Professional Appearance',
+          content:[
+            {h:'The Standard', b:'Contractors must present in a clean, polished, and client-ready manner at all times while on Cio Bela premises. Your appearance communicates your brand. Cio Bela\'s aesthetic is Warm Minimalism — earthy tones, clean lines, understated elegance. Your personal style should complement — not contradict — this environment.\n\nEncouraged: Neutral/earth tones or all-black attire, clean pressed clothing, closed-toe shoes, hair away from face, minimal accessories.\n\nNot Appropriate: Visibly dirty or torn clothing, offensive graphic content, open-toe shoes during service, strong fragrances, unkempt appearance.'},
+            {h:'Personal Hygiene', b:'Personal hygiene is non-negotiable in close-proximity nail services. Contractors must arrive clean, odor-neutral, and client-ready. Arriving directly from a workout without freshening up is not appropriate for a client-facing environment.'},
+          ]
+        },
+        {
+          num:'02', title:'Station Setup & Cleanliness',
+          content:[
+            {h:'Station Presentation Standard', b:'Your station must be clean, organized, and visually cohesive at all times — before, during, and after each client. Products neatly arranged. Surfaces free of dust, buildup, and clutter. Your workspace is visible to every client who walks through the door.'},
+            {h:'Sanitation Protocol', b:'All implements must be properly disinfected between every client using EPA-registered, TDLR-approved disinfectants. Single-use items (files, buffers, orangewood sticks) must be discarded after each client — never reused. Implements must be stored in a sealed container or UV sterilization case. TDLR fines resulting from sanitation violations at your station will be charged back to you.'},
+            {h:'End-of-Shift Responsibility', b:'Before leaving, your station must be wiped down, disinfected, organized, and ready for your next appointment. All product bottles closed and stored, surface cleaned, trash emptied, implements properly stored. Leaving a messy station may trigger the self-help cleaning charge outlined in your Contractor Agreement.'},
+          ]
+        },
+        {
+          num:'03', title:'Music & Ambiance',
+          content:[
+            {h:'Salon Background Music', b:'Cio Bela curates salon background music — ambient, R&B, neo-soul, or lounge playlists — managed by Salon Management. Contractors may play their own music via personal earbuds or low-volume personal speakers, provided it does not overpower the salon\'s background music or create a distraction.'},
+            {h:'Volume & Noise', b:'Conversation volume should not carry across the salon floor. Phone calls should be taken briefly. FaceTime or video calls with audio are not permitted in the service area.'},
+            {h:'Television & Video', b:'Television or shared screen content is managed by Salon Management only. Contractors may not connect personal devices to shared screens without explicit management approval.'},
+          ]
+        },
+        {
+          num:'04', title:'Client Communication Standards',
+          content:[
+            {h:'Greeting & First Impressions', b:'All clients must be acknowledged within 30 seconds of entering — even mid-service. A warm "Welcome in, I\'ll be right with you!" is always appropriate.'},
+            {h:'During Service', b:'Give every client your full attention. Limit personal phone use to essential communication only. Conversation should be warm, professional, and client-led. Avoid controversial topics including politics, religion, or other contractors\' personal business.'},
+            {h:'Conflict Resolution', b:'If a client is unhappy, remain calm, listen fully, and do not become defensive. As an independent contractor, the resolution of service disputes is between you and your client directly — your clients pay you, not the salon. If you need guidance handling a difficult situation, management is available to assist.'},
+            {h:'Client Privacy', b:'All information shared by clients during their appointment is confidential. Do not share, repeat, or discuss client information with other contractors, on social media, or in any public forum.'},
+          ]
+        },
+        {
+          num:'05', title:'Social Media & Photography',
+          content:[
+            {h:'Photography of Your Work', b:'You are encouraged to photograph and share your completed nail work. When posting content captured at Cio Bela, tagging @CioBelaSalons is encouraged and mutually beneficial.'},
+            {h:'Photography of Clients', b:'Explicit verbal or written consent from the client is required before posting any image — including photos of just their hands — to any public-facing social media account.'},
+            {h:'Branding on Social Media', b:'While contracted, you may identify yourself as working "at Cio Bela." Upon termination or resignation, all Cio Bela references must be removed from your profile, bio, and highlights within 24 hours. You may retain portfolio content of your completed work.'},
+            {h:'Content Standards', b:'Content featuring the Cio Bela space or brand must reflect our brand positively. Do not post content that is politically divisive, sexually explicit, discriminatory, or that portrays Cio Bela negatively. Such posts are grounds for immediate contractor status review.'},
+          ]
+        },
+        {
+          num:'06', title:'Guest & Visitor Policy',
+          content:[
+            {h:'Personal Visitors', b:'Cio Bela is a professional service environment. While brief personal visits from friends or family are permitted, guests may not remain on premises for extended periods. Guests may come in for a service or stop by to say hello, but may not linger at the workspace, occupy client seating, or remain in the salon for hours at a time. This applies to children, family members, and personal friends alike.'},
+            {h:'Children on Premises', b:'Children are welcome as clients or accompanied by a parent receiving a service. Contractors may not bring children as a childcare arrangement. Unattended children on the salon floor are not permitted.'},
+            {h:'Non-Contracted Individuals Performing Services', b:'Only licensed, contracted individuals may perform services within Cio Bela. No contractor may allow an unlicensed individual to perform any service at their station without prior written management approval. This is a TDLR compliance requirement.'},
+          ]
+        },
+      ];
+
+      sections.forEach(sec => {
+        doc.addPage();
+        doc.setFillColor(...cream); doc.rect(0,0,W,H,'F');
+        doc.setDrawColor(...gold); doc.setLineWidth(0.6); doc.line(0,14,W,14);
+
+        // Section header bar
+        doc.setFillColor(...ink); doc.rect(0,0,W,14,'F');
+        doc.setFontSize(7); doc.setFont('helvetica','normal'); doc.setTextColor(...gold);
+        doc.text('CIO BELA BRAND STANDARDS  ·  SECTION ' + sec.num, M, 9.5);
+        doc.setTextColor(mid[0],mid[1],mid[2]);
+        doc.text(dateStr, W-M, 9.5, {align:'right'});
+
+        let y = 26;
+        doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.setTextColor(...gold);
+        doc.text('SECTION ' + sec.num, M, y); y += 7;
+        doc.setFontSize(18); doc.setFont('helvetica','bold'); doc.setTextColor(...ink);
+        doc.text(sec.title, M, y); y += 4;
+        doc.setDrawColor(...gold); doc.setLineWidth(0.4); doc.line(M, y, M+60, y); y += 10;
+
+        sec.content.forEach(block => {
+          if (y > H - 40) { doc.addPage(); doc.setFillColor(...cream); doc.rect(0,0,W,H,'F'); y = 24; }
+          // Gold accent bar
+          doc.setFillColor(...gold); doc.rect(M, y, 3, 12, 'F');
+          doc.setFontSize(10); doc.setFont('helvetica','bold'); doc.setTextColor(...ink);
+          doc.text(block.h, M+7, y+8); y += 16;
+          doc.setFontSize(8.5); doc.setFont('helvetica','normal'); doc.setTextColor(...ink);
+          const lines = doc.splitTextToSize(block.b, CW-4);
+          if (y + lines.length * 4.5 > H - 28) { doc.addPage(); doc.setFillColor(...cream); doc.rect(0,0,W,H,'F'); y = 24; }
+          doc.text(lines, M+4, y);
+          y += lines.length * 4.5 + 10;
+
+          // separator
+          doc.setDrawColor(...warm[0],...warm.slice(1)); doc.setLineWidth(0.15);
+          doc.line(M+4, y-4, W-M, y-4);
+        });
+
+        // Ack box at bottom
+        doc.setFillColor(...warm); doc.rect(M, H-30, CW, 18, 'F');
+        doc.setDrawColor(...gold); doc.setLineWidth(0.3); doc.rect(M, H-30, CW, 18);
+        doc.setFillColor(...green); doc.rect(M+4, H-26, 4, 4, 'F');
+        doc.setFontSize(7.5); doc.setFont('helvetica','bold'); doc.setTextColor(...green);
+        doc.text('✓ ACKNOWLEDGED BY: ' + name, M+12, H-23);
+        doc.setFontSize(7); doc.setFont('helvetica','normal'); doc.setTextColor(...mid);
+        doc.text('Section ' + sec.num + ' — ' + sec.title + '  |  Signed: ' + dateStr, M+12, H-17);
+
+        // footer
+        doc.setFillColor(...ink); doc.rect(0,H-10,W,10,'F');
+        doc.setFontSize(6); doc.setFont('helvetica','normal'); doc.setTextColor(...gold);
+        doc.text('Cio Bela Brand Standards Handbook  |  Section ' + sec.num + ' of 06', M, H-4.5);
+        doc.setTextColor(...mid); doc.text('Page ' + doc.internal.getNumberOfPages(), W-M, H-4.5, {align:'right'});
+      });
+
+      // ── SIGNATURE PAGE ──
+      doc.addPage();
+      doc.setFillColor(...cream); doc.rect(0,0,W,H,'F');
+      doc.setFillColor(...ink); doc.rect(0,0,W,14,'F');
+      doc.setFontSize(7); doc.setFont('helvetica','normal'); doc.setTextColor(...gold);
+      doc.text('CIO BELA BRAND STANDARDS  ·  ACKNOWLEDGMENT & SIGNATURE', M, 9.5);
+
+      let y = 28;
+      doc.setFontSize(18); doc.setFont('helvetica','bold'); doc.setTextColor(...ink);
+      doc.text('Acknowledgment & Signature', M, y); y += 5;
+      doc.setDrawColor(...gold); doc.setLineWidth(0.4); doc.line(M, y, M+80, y); y += 12;
+
+      // Certification text
+      doc.setFontSize(8.5); doc.setFont('helvetica','normal'); doc.setTextColor(...ink);
+      const cert = 'I, ' + name + ', hereby confirm that I have fully read, reviewed, and understood all six (6) sections of the Cio Bela Brand Standards Handbook. I agree to uphold these standards as an independent contractor operating within Cio Bela — Multi Service Salon, Spa & Wellness Center LLC, located at 27327 Robinson Rd., Suites 3 & 4, Oak Ridge North, TX 77385. I understand that failure to comply with these standards may result in remedies outlined in my Contractor Agreement, up to and including termination.';
+      const certL = doc.splitTextToSize(cert, CW); doc.text(certL, M, y); y += certL.length*4.5 + 8;
+
+      // Sections confirmed
+      doc.setFillColor(...warm); doc.rect(M, y, CW, 52, 'F');
+      doc.setDrawColor(...gold); doc.setLineWidth(0.3); doc.rect(M, y, CW, 52);
+      doc.setFontSize(7); doc.setFont('helvetica','bold'); doc.setTextColor(...mid); doc.text('SECTIONS ACKNOWLEDGED', M+4, y+5);
+      let col1Y = y+12, col2Y = y+12;
+      sectionNames.slice(1).forEach((s,i) => {
+        const col = i < 3 ? M+4 : M+CW/2;
+        const cy = i < 3 ? col1Y : col2Y;
+        doc.setFillColor(...green); doc.rect(col, cy-3, 3, 3, 'F');
+        doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.setTextColor(...ink);
+        doc.text('0'+(i+1)+' — '+s, col+6, cy);
+        if (i < 3) col1Y += 8; else col2Y += 8;
+      });
+      y += 58;
+
+      // Contractor info
+      const fields = [['Full Legal Name',name],['Texas License #',license],['Phone',phone],['Email',email],['Date Signed',dateStr],['Time Signed',timeStr]];
+      fields.forEach(([lbl,val]) => {
+        doc.setFontSize(6.5); doc.setFont('helvetica','bold'); doc.setTextColor(...mid); doc.text(lbl, M, y);
+        doc.setFontSize(9.5); doc.setFont('helvetica','normal'); doc.setTextColor(...ink); doc.text(val, M+50, y);
+        y += 8;
+      });
+      y += 4;
+
+      // Signature box
+      doc.setFontSize(7.5); doc.setFont('helvetica','bold'); doc.setTextColor(...mid); doc.text('CONTRACTOR SIGNATURE', M, y); y += 4;
+      doc.setDrawColor(...mid); doc.setLineWidth(0.3); doc.rect(M, y, CW, 28);
+      try { doc.addImage(sigImg,'PNG',M+1,y+1,CW-2,26); } catch(e){}
+      y += 32;
+
+      doc.setFontSize(7); doc.setFont('helvetica','bold'); doc.setTextColor(...mid); doc.text('PRINT NAME', M, y); y += 5;
+      doc.setFontSize(12); doc.setFont('helvetica','bold'); doc.setTextColor(...ink); doc.text(name, M, y); y += 10;
+
+      // Legal footnote
+      doc.setFontSize(7); doc.setFont('helvetica','normal'); doc.setTextColor(...mid);
+      const fn = 'This electronic signature is legally binding under the E-SIGN Act and the Texas Uniform Electronic Transactions Act (TUETA). Montgomery County, Texas jurisdiction applies.';
+      const fnL = doc.splitTextToSize(fn, CW); doc.text(fnL, M, y);
+
+      // footer all pages
+      const pc = doc.internal.getNumberOfPages();
+      for (let i=2;i<=pc;i++) {
+        doc.setPage(i);
+        doc.setFillColor(...ink); doc.rect(0,H-10,W,10,'F');
+        doc.setFontSize(6); doc.setFont('helvetica','normal'); doc.setTextColor(...gold);
+        doc.text('Cio Bela Brand Standards Handbook  |  Confidential Contractor Document', M, H-4.5);
+        doc.setTextColor(...mid); doc.text('Page '+i+' of '+pc, W-M, H-4.5, {align:'right'});
+      }
+
+      doc.save('CioBela-BrandStandards-' + name.replace(/\s+/g,'-') + '.pdf');
+    } catch(err) {
+      console.error('PDF error:', err);
+    }
+
+    document.getElementById('handbook').style.display = 'none';
+    document.getElementById('sticky-nav').style.display = 'none';
+    document.getElementById('success').style.display = 'block';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+</script>
+</body>
+</html>
