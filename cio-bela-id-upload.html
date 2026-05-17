@@ -30,7 +30,7 @@ function scrollTop() {
     --white: #FFFFFF;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink);  }
 
   header { background: var(--ink); padding: 26px 24px 20px; text-align: center; border-bottom: 2px solid var(--gold); }
   .h-brand { font-family: 'Cormorant Garamond', serif; font-size: clamp(20px,4vw,28px); font-weight: 300; letter-spacing: .22em; text-transform: uppercase; color: var(--gold2); }
@@ -412,14 +412,11 @@ function scrollTop() {
 
   async function submitForm() {
     var ok = true;
-    var required = ['c-name','c-phone','c-email','c-dob','id-type','id-num','id-exp','lic-num','lic-type','lic-exp'];
+    var required = ['c-name','c-phone','c-email','lic-num'];
     for (var i = 0; i < required.length; i++) {
       if (!reqField(required[i])) ok = false;
     }
     if (!ok) { alert('Please complete all required fields.'); return; }
-    if (!uploads['zone-id-front']) { alert('Please upload the front of your government-issued ID.'); return; }
-    if (!uploads['zone-id-back']) { alert('Please upload the back of your government-issued ID.'); return; }
-    if (!uploads['zone-lic']) { alert('Please upload your Texas cosmetology / nail license.'); return; }
     var sigNameEl = document.getElementById('sig-name');
     if (!sigNameEl.value.trim()) { sigNameEl.classList.add('invalid'); alert('Please type your full legal name.'); return; }
     if (!hasSig) { alert('Please draw your signature before submitting.'); return; }
