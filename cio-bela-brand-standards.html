@@ -5,7 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cio Bela — Brand Standards Handbook</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+function scrollTop() {
+  try { window.location.hash=''; window.location.hash='top'; } catch(e) {}
+  scrollTop();
+}
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
@@ -422,6 +427,9 @@ canvas#sigPad { display: block; width: 100%; height: 150px; cursor: crosshair; t
 </style>
 </head>
 <body>
+<a id="top" style="position:absolute;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;" aria-hidden="true"></a>
+
+<a id="top" style="position:absolute;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;" aria-hidden="true"></a>
 
 <!-- ══════════ HERO ══════════ -->
 <div class="hero" id="hero">
@@ -1081,11 +1089,8 @@ canvas#sigPad { display: block; width: 100%; height: 150px; cursor: crosshair; t
     successEl.style.display = 'block';
     successEl.style.padding = '60px 20px';
     successEl.style.textAlign = 'center';
-    try { window.scrollTo(0,0); } catch(e) {}
-    try { document.documentElement.scrollTop=0; } catch(e) {}
-    try { document.body.scrollTop=0; } catch(e) {}
-
-    // Save to Supabase in background — non-blocking
+    scrollTop();
+// Save to Supabase in background — non-blocking
     if (emailVal && window.supabase) {
       try {
         var db = window.supabase.createClient('https://cphlvgsneukrrzyajikb.supabase.co','sb_publishable_FjWhDrtiKc6Ijhcv5WEt1w_Js55zgsC');

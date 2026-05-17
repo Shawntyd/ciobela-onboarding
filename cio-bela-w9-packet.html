@@ -5,7 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cio Bela — W-9 Tax Information Form</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+function scrollTop() {
+  try { window.location.hash=''; window.location.hash='top'; } catch(e) {}
+  scrollTop();
+}
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root {
@@ -95,6 +100,9 @@
 </style>
 </head>
 <body>
+<a id="top" style="position:absolute;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;" aria-hidden="true"></a>
+
+<a id="top" style="position:absolute;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;" aria-hidden="true"></a>
 
 <header>
   <div class="h-brand">Cio Bela</div>
@@ -437,7 +445,7 @@
     document.getElementById('page-' + n).classList.add('active');
     updProg();
     if (n === 4) buildReview();
-    window.scrollTo({top:0,behavior:'smooth'});
+    scrollTop();
   }
 
   function selectClass(el, code) {
@@ -773,10 +781,8 @@
     document.getElementById('prog-wrap').style.display = 'none';
     document.querySelectorAll('.page').forEach(function(p){ p.style.display='none'; });
     document.getElementById('success').style.display = 'block';
-    try { window.scrollTo(0,0); } catch(e) {}
-    try { document.documentElement.scrollTop=0; } catch(e) {}
-    try { document.body.scrollTop=0; } catch(e) {}
-  }
+    scrollTop();
+}
 
   function downloadPDF() {
     try { generatePDF(); } catch(e) { alert('PDF download unavailable. Your W-9 has been recorded.'); }

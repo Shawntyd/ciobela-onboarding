@@ -5,7 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cio Bela — Social Media & Photography Release</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+function scrollTop() {
+  try { window.location.hash=''; window.location.hash='top'; } catch(e) {}
+  scrollTop();
+}
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
@@ -106,6 +111,9 @@ hr.div{border:none;border-top:1px solid var(--border);margin:24px 0;}
 </style>
 </head>
 <body>
+<a id="top" style="position:absolute;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;" aria-hidden="true"></a>
+
+<a id="top" style="position:absolute;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;" aria-hidden="true"></a>
 
 <div class="hero">
   <div class="hero-inner">
@@ -526,9 +534,7 @@ async function submitRelease(){
   document.querySelector('.hero').style.display='none';
   document.querySelectorAll('.sec-label, .grant-card, .ob-card, .fg, hr.div').forEach(function(el){el.style.display='none';});
   document.getElementById('success').style.display='block';
-  try { window.scrollTo(0,0); } catch(e) {}
-  try { document.documentElement.scrollTop=0; } catch(e) {}
-  try { document.body.scrollTop=0; } catch(e) {}
+  scrollTop();
 }
 
 function downloadPDF() {

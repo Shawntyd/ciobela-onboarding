@@ -5,7 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cio Bela — Contractor Onboarding Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+function scrollTop() {
+  try { window.location.hash=''; window.location.hash='top'; } catch(e) {}
+  scrollTop();
+}
+</script>
 <style>
 :root{--ink:#16120E;--cream:#F7F2EC;--warm:#EDE4D4;--gold:#B08D57;--gold2:#CFA96E;--mid:#7A6A55;--muted:#A8967E;--border:#D5C8B4;--white:#FFFFFF;--alert:#7C3B20;--alert-bg:#FBF0E9;--green:#2F5C42;--green-bg:#ECF4EF;--info:#1B4D6B;--info-bg:#EBF4FA;}
 
@@ -158,6 +163,9 @@ body{
 </style>
 </head>
 <body>
+<a id="top" style="position:absolute;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;" aria-hidden="true"></a>
+
+<a id="top" style="position:absolute;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;" aria-hidden="true"></a>
 <a id="top-anchor" style="position:absolute;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;" aria-hidden="true"></a>
 
 <div id="loading"><div class="lring"></div><div class="ltxt">Loading your profile...</div></div>
@@ -366,10 +374,8 @@ function go(id) {
   var ss = document.querySelectorAll('.screen');
   for (var i = 0; i < ss.length; i++) ss[i].classList.remove('active');
   document.getElementById(id).classList.add('active');
-  try { window.scrollTo(0, 0); } catch(e) {}
-  try { document.documentElement.scrollTop = 0; } catch(e) {}
-  try { document.body.scrollTop = 0; } catch(e) {}
-  // Tell Wix parent to scroll to top
+  scrollTop();
+// Tell Wix parent to scroll to top
   try { window.parent.postMessage({ action: 'scrollToTop' }, '*'); } catch(e) {}
   // Use anchor for maximum mobile compatibility
   window.location.hash = '';
