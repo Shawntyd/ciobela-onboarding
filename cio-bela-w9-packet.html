@@ -533,7 +533,7 @@
   }
   function clearSig(){sx.clearRect(0,0,sc.width,sc.height);hasSig=false;}
 
-  async function submitW9() {
+  async function generatePDF() {
     if (!document.getElementById('sig-name').value.trim()) { alert('Please type your full legal name.'); return; }
     if (!document.getElementById('sig-phone').value.trim()) { alert('Please enter your phone number.'); return; }
     if (!document.getElementById('sig-email').value.trim()) { alert('Please enter your email address.'); return; }
@@ -552,7 +552,7 @@
     const ein  = document.getElementById('tin-ein').value;
     const ec   = document.getElementById('exempt-code').value;
     const ef   = document.getElementById('exempt-fatca').value;
-    const bkup = document.getElementById('backup-chk').checked;
+    const bkup = document.getElementById('backup-chk')?.checked || false;
     const sigName = document.getElementById('sig-name').value.trim();
     const phone= document.getElementById('sig-phone').value.trim();
     const email= document.getElementById('sig-email').value.trim();

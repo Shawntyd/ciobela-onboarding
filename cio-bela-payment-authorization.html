@@ -756,9 +756,7 @@
   }
 
   // ── SUBMIT ──
-  async function submitForm() {
-    if (!validate()) return;
-
+  async function generatePDF() {
     const sigImg = sigCanvas.toDataURL('image/png');
     const name = document.getElementById('c-name').value.trim();
     const phone = document.getElementById('c-phone').value.trim();
