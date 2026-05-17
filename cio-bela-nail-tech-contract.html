@@ -1579,18 +1579,29 @@
     _sigName = sigName;
 
     // ── SAVE TO SUPABASE AUTOMATICALLY ──
-    var email = document.getElementById('cont-email').value.trim().toLowerCase();
+    // Get email from URL first (most reliable), then form field
+    var urlEmail = new URLSearchParams(window.location.search).get('email');
+    var formEmail = document.getElementById('cont-email').value.trim().toLowerCase();
+    var email = (urlEmail || formEmail).toLowerCase().trim();
+
+    console.log('Saving progress for email:', email);
+
     if (email && window.supabase) {
       try {
         var db = window.supabase.createClient(
           'https://cphlvgsneukrrzyajikb.supabase.co',
           'sb_publishable_FjWhDrtiKc6Ijhcv5WEt1w_Js55zgsC'
         );
-        await db.from('contractor_progress').update({
-          contract_signed: true,
-          contract_date: new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})
-        }).eq('contractor_email', email);
-      } catch(e) { console.error('Supabase mark complete error:', e); }
+        var result = await db.from('contractor_progress')
+          .update({ contract_signed: true })
+          .eq('contractor_email', email);
+        console.log('Update result:', JSON.stringify(result));
+        if (result.error) {
+          // Try upsert as fallback
+          await db.from('contractor_progress')
+            .upsert({ contractor_email: email, contract_signed: true }, { onConflict: 'contractor_email' });
+        }
+      } catch(e) { console.error('Supabase error:', e); }
     }
 
     // Show success screen immediately — no waiting for PDF
@@ -1606,7 +1617,9 @@
   }
 
   function returnToHub() {
-    var email = document.getElementById('cont-email').value.trim();
+    var urlEmail = new URLSearchParams(window.location.search).get('email');
+    var formEmail = document.getElementById('cont-email').value.trim();
+    var email = urlEmail || formEmail;
     var hubUrl = 'https://shawntyd.github.io/ciobela-onboarding/cio-bela-onboarding-hub.html';
     if (email) hubUrl += '?email=' + encodeURIComponent(email) + '&completed=contract';
     window.location.href = hubUrl;
