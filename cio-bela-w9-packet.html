@@ -517,19 +517,17 @@
   function initSig() {
     sc = document.getElementById('sigPad');
     sx = sc.getContext('2d');
-    const ratio = window.devicePixelRatio || 1;
-    const r = sc.getBoundingClientRect();
-    sc.width = r.width * ratio; sc.height = 140 * ratio;
-    sx.scale(ratio, ratio);
-    sx.strokeStyle = '#181410'; sx.lineWidth = 2; sx.lineCap = 'round'; sx.lineJoin = 'round';
-    const pos = e => { const rect = sc.getBoundingClientRect(); const s = e.touches?e.touches[0]:e; return{x:s.clientX-rect.left,y:s.clientY-rect.top}; };
-    sc.addEventListener('mousedown', e=>{drawing=true;const p=pos(e);sx.beginPath();sx.moveTo(p.x,p.y);});
-    sc.addEventListener('mousemove', e=>{if(!drawing)return;hasSig=true;const p=pos(e);sx.lineTo(p.x,p.y);sx.stroke();});
-    sc.addEventListener('mouseup', ()=>drawing=false);
-    sc.addEventListener('mouseleave', ()=>drawing=false);
-    sc.addEventListener('touchstart', e=>{e.preventDefault();drawing=true;const p=pos(e);sx.beginPath();sx.moveTo(p.x,p.y);},{passive:false});
-    sc.addEventListener('touchmove', e=>{e.preventDefault();if(!drawing)return;hasSig=true;const p=pos(e);sx.lineTo(p.x,p.y);sx.stroke();},{passive:false});
-    sc.addEventListener('touchend', ()=>drawing=false);
+    sc.width = sc.parentElement ? sc.parentElement.offsetWidth || 340 : 340;
+    sc.height = 140;
+    sx.strokeStyle = '#181410'; sx.lineWidth = 2.5; sx.lineCap = 'round'; sx.lineJoin = 'round';
+    var pos = function(e){ var rect=sc.getBoundingClientRect(); var s=e.touches?e.touches[0]:e; return{x:s.clientX-rect.left,y:s.clientY-rect.top}; };
+    sc.addEventListener('mousedown', function(e){drawing=true;var p=pos(e);sx.beginPath();sx.moveTo(p.x,p.y);});
+    sc.addEventListener('mousemove', function(e){if(!drawing)return;hasSig=true;var p=pos(e);sx.lineTo(p.x,p.y);sx.stroke();});
+    sc.addEventListener('mouseup', function(){drawing=false;});
+    sc.addEventListener('mouseleave', function(){drawing=false;});
+    sc.addEventListener('touchstart', function(e){e.preventDefault();drawing=true;var p=pos(e);sx.beginPath();sx.moveTo(p.x,p.y);},{passive:false});
+    sc.addEventListener('touchmove', function(e){e.preventDefault();if(!drawing)return;hasSig=true;var p=pos(e);sx.lineTo(p.x,p.y);sx.stroke();},{passive:false});
+    sc.addEventListener('touchend', function(){drawing=false;});
   }
   function clearSig(){sx.clearRect(0,0,sc.width,sc.height);hasSig=false;}
 
@@ -761,10 +759,12 @@
       } catch(e) { console.error('Supabase error:', e); }
     }
 
-    document.querySelector('.wrap').style.display = 'none';
     document.getElementById('prog-wrap').style.display = 'none';
+    document.querySelectorAll('.page').forEach(function(p){ p.style.display='none'; });
     document.getElementById('success').style.display = 'block';
-    window.scrollTo({top:0,behavior:'smooth'});
+    try { window.scrollTo(0,0); } catch(e) {}
+    try { document.documentElement.scrollTop=0; } catch(e) {}
+    try { document.body.scrollTop=0; } catch(e) {}
   }
 
   function downloadPDF() {

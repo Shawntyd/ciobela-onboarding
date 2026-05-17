@@ -539,9 +539,11 @@
       } catch(e) { console.error('Supabase error:', e); }
     }
 
-    document.querySelector('.wrap').style.display = 'none';
+    document.querySelectorAll('.form-section, .upload-section, .sig-section, .section-label, .instr').forEach(function(el){ el.style.display='none'; });
     document.getElementById('success').style.display = 'block';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    try { window.scrollTo(0,0); } catch(e) {}
+    try { document.documentElement.scrollTop=0; } catch(e) {}
+    try { document.body.scrollTop=0; } catch(e) {}
   }
 
   function downloadPDF() {
