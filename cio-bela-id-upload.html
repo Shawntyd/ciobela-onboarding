@@ -533,9 +533,20 @@
     if (email && window.supabase) {
       try {
         var db = window.supabase.createClient('https://cphlvgsneukrrzyajikb.supabase.co','sb_publishable_FjWhDrtiKc6Ijhcv5WEt1w_Js55zgsC');
+        
+        var current = await db.from('contractor_progress').select('*').eq('contractor_email', emailLower);
+        var total = 0;
+        if (current.data && current.data.length > 0) {
+          var row = current.data[0];
+          row['id_uploaded'] = true;
+          var allF = ['contract_signed', 'payment_signed', 'w9_signed', 'standards_signed', 'id_uploaded', 'release_signed', 'emergency_signed'];
+          total = allF.filter(function(f){ return !!row[f]; }).length;
+        }
         await db.from('contractor_progress').update({
-          id_uploaded: true
-        }).eq('contractor_email', email);
+          id_uploaded: true,
+          total_complete: total,
+          onboarding_done: total >= 6
+        }).eq('contractor_email', emailLower);
       } catch(e) { console.error('Supabase error:', e); }
     }
 
