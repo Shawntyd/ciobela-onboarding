@@ -6,6 +6,7 @@
 <title>Cio Bela — Nail Tech Contractor Agreement</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root {
     --cream: #F7F3EE;
@@ -1133,6 +1134,50 @@
     }
     updateProgress();
     initSig();
+
+    // ── SUPABASE AUTO-FILL ──
+    var SUPA_URL = 'https://cphlvgsneukrrzyajikb.supabase.co';
+    var SUPA_KEY = 'sb_publishable_FjWhDrtiKc6Ijhcv5WEt1w_Js55zgsC';
+
+    function fillFields(p) {
+      var set = function(id, val) { var el = document.getElementById(id); if (el && val) el.value = val; };
+      set('cont-name',    p.full_name);
+      set('cont-phone',   p.phone);
+      set('cont-email',   p.email);
+      set('cont-dob',     p.date_of_birth);
+      set('cont-license', p.license_number);
+      set('cont-lic-exp', p.license_expiration);
+      set('cont-address', p.address);
+      set('emerg-name',   p.emergency_name);
+      set('emerg-phone',  p.emergency_phone);
+    }
+
+    // Try sessionStorage first (same device, instant)
+    try {
+      var cached = sessionStorage.getItem('cb_prefill');
+      if (cached) {
+        var cp = JSON.parse(cached);
+        // Map from hub format to Supabase format
+        fillFields({
+          full_name: cp.fullName, phone: cp.phone, email: cp.email,
+          date_of_birth: cp.dateOfBirth, license_number: cp.licenseNumber,
+          license_expiration: cp.licenseExpiration, address: cp.address,
+          emergency_name: cp.emergencyName, emergency_phone: cp.emergencyPhone
+        });
+        return;
+      }
+    } catch(e) {}
+
+    // Try URL email param + Supabase
+    var params = new URLSearchParams(window.location.search);
+    var email = params.get('email');
+    if (email && window.supabase) {
+      var db = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+      db.from('contractor_profiles').select('*').eq('email', email.toLowerCase().trim())
+        .then(function(res) {
+          if (res.data && res.data.length > 0) fillFields(res.data[0]);
+        });
+    }
   });
 
   function updateProgress() {

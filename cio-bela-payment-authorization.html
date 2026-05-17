@@ -6,6 +6,7 @@
 <title>Cio Bela — Station Rental Auto Payment Authorization</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root {
     --ink:    #181410;
@@ -722,6 +723,17 @@
     sigCanvas.addEventListener('touchstart', e => { e.preventDefault(); drawing = true; const p = pos(e); sigCtx.beginPath(); sigCtx.moveTo(p.x, p.y); }, { passive: false });
     sigCanvas.addEventListener('touchmove', e => { e.preventDefault(); if (!drawing) return; hasSig = true; const p = pos(e); sigCtx.lineTo(p.x, p.y); sigCtx.stroke(); }, { passive: false });
     sigCanvas.addEventListener('touchend', () => drawing = false);
+
+    // ── SUPABASE AUTO-FILL ──
+    var set = function(id,val){var el=document.getElementById(id);if(el&&val)el.value=val;};
+    function doFill(p){
+      set('c-name',p.full_name||p.fullName); set('c-phone',p.phone);
+      set('c-email',p.email); set('c-license',p.license_number||p.licenseNumber);
+      if(typeof updateProse==='function') updateProse();
+    }
+    try{var cp=JSON.parse(sessionStorage.getItem('cb_prefill')||'null');if(cp)doFill({full_name:cp.fullName,phone:cp.phone,email:cp.email,license_number:cp.licenseNumber});}catch(e){}
+    var em=new URLSearchParams(window.location.search).get('email');
+    if(em&&window.supabase){var db=window.supabase.createClient('https://cphlvgsneukrrzyajikb.supabase.co','sb_publishable_FjWhDrtiKc6Ijhcv5WEt1w_Js55zgsC');db.from('contractor_profiles').select('*').eq('email',em.toLowerCase().trim()).then(function(r){if(r.data&&r.data.length>0)doFill(r.data[0]);});}
   });
 
   function clearSig() {

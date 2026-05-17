@@ -6,6 +6,7 @@
 <title>Cio Bela — W-9 Tax Information Form</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root {
     --ink:#181410; --cream:#F8F4EF; --warm:#EDE5D8; --gold:#B5924A; --gold2:#D4AE72;
@@ -419,6 +420,16 @@
     document.getElementById('sig-date').value = dateStr;
     updProg();
     initSig();
+
+    // ── SUPABASE AUTO-FILL ──
+    var set=function(id,val){var el=document.getElementById(id);if(el&&val)el.value=val;};
+    function doFill(p){
+      set('p0-name',p.full_name||p.fullName); set('p2-street',p.address);
+      set('sig-phone',p.phone); set('sig-email',p.email); set('sig-name',p.full_name||p.fullName);
+    }
+    try{var cp=JSON.parse(sessionStorage.getItem('cb_prefill')||'null');if(cp)doFill({full_name:cp.fullName,address:cp.address,phone:cp.phone,email:cp.email});}catch(e){}
+    var em=new URLSearchParams(window.location.search).get('email');
+    if(em&&window.supabase){var db=window.supabase.createClient('https://cphlvgsneukrrzyajikb.supabase.co','sb_publishable_FjWhDrtiKc6Ijhcv5WEt1w_Js55zgsC');db.from('contractor_profiles').select('*').eq('email',em.toLowerCase().trim()).then(function(r){if(r.data&&r.data.length>0)doFill(r.data[0]);});}
   });
 
   function updProg() {
