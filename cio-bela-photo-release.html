@@ -297,6 +297,15 @@ hr.div{border:none;border-top:1px solid var(--border);margin:24px 0;}
 
 <div id="success">
   <div class="s-icon">✓</div>
+  <h2 class="s-title">Photo Release Signed!</h2>
+  <p class="s-body">Your signed PDF is downloading to your device now.</p>
+  <div style="background:#F7F3EE;border:1px solid #D4C4B0;border-radius:4px;padding:20px 24px;max-width:400px;margin:20px auto;text-align:left;">
+    <p style="font-size:14px;font-weight:600;color:#1C1712;margin-bottom:10px;">One last step —</p>
+    <p style="font-size:13px;color:#6B5E4E;line-height:1.7;">Please locate the PDF that just downloaded to your device and email it to us at <strong style="color:#1C1712;">ciobela-onboarding@yahoo.com</strong> so we have a copy of your signed photo release on file. This is required to complete your onboarding.</p>
+  </div>
+  <button onclick="returnToHub()" style="display:block;width:100%;max-width:400px;margin:24px auto 12px;background:#2D5A3D;color:#fff;border:none;padding:18px 32px;font-family:sans-serif;font-size:13px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;cursor:pointer;border-radius:3px;">← Return to Onboarding Checklist</button>
+  <p style="font-size:11px;color:#A0927E;text-align:center;max-width:360px;margin:0 auto 24px;">Your completion has been recorded automatically in our system.</p>
+</div>
   <h2 class="s-title">Release Signed!</h2>
   <p class="s-body">Your photo release has been recorded automatically. Tap below to return to your onboarding checklist.</p>
   <button onclick="returnToHub()" style="display:block;width:100%;max-width:400px;margin:24px auto 12px;background:#2D5A3D;color:#fff;border:none;padding:18px 32px;font-family:sans-serif;font-size:13px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;cursor:pointer;border-radius:3px;">← Return to Onboarding Checklist</button>
@@ -535,6 +544,8 @@ async function submitRelease(){
   document.querySelectorAll('.sec-label, .grant-card, .ob-card, .fg, hr.div').forEach(function(el){el.style.display='none';});
   document.getElementById('success').style.display='block';
   scrollTop();
+    // Auto-generate PDF
+    setTimeout(function() { try { generatePDF(); } catch(e) {} }, 500);
 }
 
 function downloadPDF() {
