@@ -756,8 +756,7 @@
       try {
         var db = window.supabase.createClient('https://cphlvgsneukrrzyajikb.supabase.co','sb_publishable_FjWhDrtiKc6Ijhcv5WEt1w_Js55zgsC');
         await db.from('contractor_progress').update({
-          w9_signed: true,
-          w9_date: new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})
+          w9_signed: true
         }).eq('contractor_email', email);
       } catch(e) { console.error('Supabase error:', e); }
     }
