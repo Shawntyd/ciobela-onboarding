@@ -520,6 +520,7 @@
 </style>
 </head>
 <body>
+<a id="top-anchor" style="position:absolute;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;" aria-hidden="true"></a>
 
 <header>
   <div class="salon-name">Cio Bela</div>
@@ -1203,15 +1204,9 @@
     document.getElementById('page-' + n).classList.add('active');
     updateProgress();
 
-    // Scroll to very top — all methods for maximum compatibility
-    try { window.scrollTo(0, 0); } catch(e) {}
-    try { document.documentElement.scrollTop = 0; } catch(e) {}
-    try { document.body.scrollTop = 0; } catch(e) {}
-    // Scroll the header into view as anchor
-    try {
-      var hdr = document.querySelector('header');
-      if (hdr) hdr.scrollIntoView({ block: 'start' });
-    } catch(e) {}
+    // Use anchor navigation — most reliable scroll method on mobile
+    window.location.hash = '';
+    window.location.hash = 'top-anchor';
 
     if (n === 8) populateReview();
   }
