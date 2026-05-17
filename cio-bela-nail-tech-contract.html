@@ -1191,8 +1191,10 @@
     currentPage = n;
     document.getElementById('page-' + n).classList.add('active');
     updateProgress();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
+    // Scroll to top — works on mobile and inside iframes
+    try { window.scrollTo(0, 0); } catch(e) {}
+    try { document.documentElement.scrollTop = 0; } catch(e) {}
+    try { document.body.scrollTop = 0; } catch(e) {}
     if (n === 8) populateReview();
   }
 
