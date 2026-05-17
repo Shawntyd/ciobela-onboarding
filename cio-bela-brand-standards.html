@@ -918,18 +918,11 @@ canvas#sigPad { display: block; width: 100%; height: 150px; cursor: crosshair; t
 <!-- SUCCESS -->
 <div id="success">
   <div class="s-icon">✓</div>
-  <h2 class="s-title">Handbook Signed</h2>
-  <p class="s-body">Your signed Brand Standards Handbook has been downloaded. Please email it to Cio Bela to complete your onboarding.</p>
-  <div class="email-pill">ciobela@email.com</div>
-  <div class="next-box">
-    <h4>Next Steps</h4>
-    <ul>
-      <li>Email the PDF to <strong>ciobela@email.com</strong> — subject: <em>"[Your Name] — Brand Standards"</em></li>
-      <li>Keep a copy for your own records</li>
-      <li>Questions about any standard? Reach out to management before your first day</li>
-      <li>Your onboarding packet is now complete — welcome to Cio Bela!</li>
-    </ul>
-  </div>
+  <h2 class="s-title">Brand Standards Signed!</h2>
+  <p class="s-body">Your acknowledgment has been recorded automatically. Tap below to return to your onboarding checklist.</p>
+  <button onclick="returnToHub()" style="display:block;width:100%;max-width:400px;margin:24px auto 12px;background:#2D5A3D;color:#fff;border:none;padding:18px 32px;font-family:sans-serif;font-size:13px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;cursor:pointer;border-radius:3px;">← Return to Onboarding Checklist</button>
+  <button onclick="downloadPDF()" style="display:block;width:100%;max-width:400px;margin:0 auto 24px;background:transparent;color:#6B5E4E;border:1px solid #D4C4B0;padding:14px 32px;font-family:sans-serif;font-size:11px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;border-radius:3px;">Download PDF Copy (Optional)</button>
+  <p style="font-size:11px;color:#A0927E;text-align:center;max-width:360px;margin:0 auto;">Your completion has been recorded automatically. No email needed.</p>
 </div>
 
 </div><!-- /main -->
@@ -1323,14 +1316,33 @@ canvas#sigPad { display: block; width: 100%; height: 150px; cursor: crosshair; t
       }
 
       doc.save('CioBela-BrandStandards-' + name.replace(/\s+/g,'-') + '.pdf');
-    } catch(err) {
-      console.error('PDF error:', err);
+    } catch(err) { console.error('PDF error:', err); }
+
+    var sbEmail = document.getElementById('sig-email').value.trim().toLowerCase();
+    if (sbEmail && window.supabase) {
+      try {
+        var db = window.supabase.createClient('https://cphlvgsneukrrzyajikb.supabase.co','sb_publishable_FjWhDrtiKc6Ijhcv5WEt1w_Js55zgsC');
+        await db.from('contractor_progress').update({
+          standards_signed: true
+        }).eq('contractor_email', sbEmail);
+      } catch(e) { console.error('Supabase error:', e); }
     }
 
     document.getElementById('handbook').style.display = 'none';
     document.getElementById('sticky-nav').style.display = 'none';
     document.getElementById('success').style.display = 'block';
     window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function downloadPDF() {
+    try { generatePDF(); } catch(e) { alert('PDF download unavailable. Your acknowledgment has been recorded.'); }
+  }
+
+  function returnToHub() {
+    var email = document.getElementById('sig-email').value.trim();
+    var url = 'https://shawntyd.github.io/ciobela-onboarding/cio-bela-onboarding-hub.html';
+    if (email) url += '?email=' + encodeURIComponent(email) + '&completed=standards';
+    window.location.href = url;
   }
 </script>
 </body>

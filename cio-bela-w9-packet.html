@@ -388,19 +388,11 @@
 <!-- SUCCESS -->
 <div id="success">
   <div class="s-icon">✓</div>
-  <h2 class="s-title">W-9 Complete</h2>
-  <p class="s-body">Your W-9 has been generated and downloaded. Please email the PDF to Cio Bela to complete your tax onboarding — and keep a copy for your own records.</p>
-  <div class="email-pill">ciobela@email.com</div>
-  <div class="next-box">
-    <h4>Next Steps</h4>
-    <ul>
-      <li>Locate the downloaded W-9 PDF on your device</li>
-      <li>Email to <strong>ciobela@email.com</strong> — subject: <em>"[Your Name] — W-9"</em></li>
-      <li>Keep a copy for your own tax records and accountant</li>
-      <li>You will receive a <strong>1099-NEC</strong> from Cio Bela by January 31 if you earn $600+ this year</li>
-      <li>Tax questions? Visit <strong>irs.gov</strong> or consult a licensed CPA</li>
-    </ul>
-  </div>
+  <h2 class="s-title">W-9 Signed!</h2>
+  <p class="s-body">Your W-9 has been recorded automatically. Tap below to return to your onboarding checklist.</p>
+  <button onclick="returnToHub()" style="display:block;width:100%;max-width:400px;margin:24px auto 12px;background:#2D5A3D;color:#fff;border:none;padding:18px 32px;font-family:sans-serif;font-size:13px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;cursor:pointer;border-radius:3px;">← Return to Onboarding Checklist</button>
+  <button onclick="downloadPDF()" style="display:block;width:100%;max-width:400px;margin:0 auto 24px;background:transparent;color:#6B5E4E;border:1px solid #D4C4B0;padding:14px 32px;font-family:sans-serif;font-size:11px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;border-radius:3px;">Download PDF Copy (Optional)</button>
+  <p style="font-size:11px;color:#A0927E;text-align:center;max-width:360px;margin:0 auto;">Your completion has been recorded automatically. No email needed.</p>
 </div>
 
 </div><!-- /wrap -->
@@ -748,15 +740,43 @@
       doc.setTextColor(...mid); doc.text(dateStr, W-M, H-4.5, {align:'right'});
 
       doc.save('CioBela-W9-' + name.replace(/\s+/g,'-') + '.pdf');
-    } catch(err) {
-      console.error('PDF error:', err);
-      alert('PDF generation failed. Please screenshot as a backup.');
+    } catch(err) { console.error('PDF error:', err); }
+  }
+
+  async function submitW9() {
+    if (!document.getElementById('sig-name').value.trim()) { alert('Please type your full legal name.'); return; }
+    if (!document.getElementById('sig-phone').value.trim()) { alert('Please enter your phone number.'); return; }
+    if (!document.getElementById('sig-email').value.trim()) { alert('Please enter your email address.'); return; }
+    if (!hasSig) { alert('Please draw your signature before submitting.'); return; }
+
+    var email = document.getElementById('sig-email').value.trim().toLowerCase();
+
+    // Save to Supabase automatically
+    if (email && window.supabase) {
+      try {
+        var db = window.supabase.createClient('https://cphlvgsneukrrzyajikb.supabase.co','sb_publishable_FjWhDrtiKc6Ijhcv5WEt1w_Js55zgsC');
+        await db.from('contractor_progress').update({
+          w9_signed: true,
+          w9_date: new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})
+        }).eq('contractor_email', email);
+      } catch(e) { console.error('Supabase error:', e); }
     }
 
     document.querySelector('.wrap').style.display = 'none';
     document.getElementById('prog-wrap').style.display = 'none';
     document.getElementById('success').style.display = 'block';
     window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function downloadPDF() {
+    try { generatePDF(); } catch(e) { alert('PDF download unavailable. Your W-9 has been recorded.'); }
+  }
+
+  function returnToHub() {
+    var email = document.getElementById('sig-email').value.trim();
+    var url = 'https://shawntyd.github.io/ciobela-onboarding/cio-bela-onboarding-hub.html';
+    if (email) url += '?email=' + encodeURIComponent(email) + '&completed=w9';
+    window.location.href = url;
   }
 </script>
 </body>

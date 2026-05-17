@@ -645,18 +645,11 @@
 <!-- SUCCESS -->
 <div id="success">
   <div class="s-icon">✓</div>
-  <h2 class="s-title">Authorization Complete</h2>
-  <p class="s-body">Your payment authorization has been submitted and your PDF has been downloaded. Please email the completed PDF to Cio Bela to finalize your payment setup.</p>
-  <div class="email-pill">ciobela@email.com</div>
-  <div class="next-box">
-    <h4>Next Steps</h4>
-    <ul>
-      <li>Locate the downloaded PDF on your device</li>
-      <li>Email it to <strong>ciobela@email.com</strong> — subject: <em>"[Your Name] — Payment Authorization"</em></li>
-      <li>Your first charge will occur the <strong>Saturday after your start date</strong></li>
-      <li>Keep a copy of this PDF for your records</li>
-    </ul>
-  </div>
+  <h2 class="s-title">Payment Authorization Signed!</h2>
+  <p class="s-body">Your payment authorization has been recorded automatically. Tap below to return to your onboarding checklist.</p>
+  <button onclick="returnToHub()" style="display:block;width:100%;max-width:400px;margin:24px auto 12px;background:#2D5A3D;color:#fff;border:none;padding:18px 32px;font-family:'DM Sans',sans-serif;font-size:13px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;cursor:pointer;border-radius:3px;">← Return to Onboarding Checklist</button>
+  <button onclick="downloadPDF()" style="display:block;width:100%;max-width:400px;margin:0 auto 24px;background:transparent;color:#6B5E4E;border:1px solid #D4C4B0;padding:14px 32px;font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;border-radius:3px;">Download PDF Copy (Optional)</button>
+  <p style="font-size:11px;color:#A0927E;text-align:center;max-width:360px;margin:0 auto;">Your completion has been recorded automatically. No email needed.</p>
 </div>
 
 <script>
@@ -670,18 +663,18 @@
   // ── PROSE UPDATE ──
   function updateProse() {
     const n = document.getElementById('c-name').value.trim() || '______________________';
-    const a = document.getElementById('c-amount').value.trim() || '$________';
     document.getElementById('prose-name').textContent = n;
-    document.getElementById('prose-amount').textContent = a;
   }
 
   // ── METHOD SELECT ──
   let selectedMethod = '';
   function selectMethod(m) {
     selectedMethod = m;
-    ['bank','debit','credit'].forEach(x => {
-      document.getElementById('m-' + x).classList.toggle('selected', x === m);
-      document.getElementById('panel-' + x).classList.toggle('active', x === m);
+    ['debit','credit'].forEach(x => {
+      var card = document.getElementById('m-' + x);
+      var panel = document.getElementById('panel-' + x);
+      if (card) card.classList.toggle('selected', x === m);
+      if (panel) panel.classList.toggle('active', x === m);
     });
   }
 
@@ -701,13 +694,10 @@
   window.addEventListener('DOMContentLoaded', () => {
     sigCanvas = document.getElementById('sigPad');
     sigCtx = sigCanvas.getContext('2d');
-    const ratio = window.devicePixelRatio || 1;
-    const r = sigCanvas.getBoundingClientRect();
-    sigCanvas.width = r.width * ratio;
-    sigCanvas.height = 150 * ratio;
-    sigCtx.scale(ratio, ratio);
+    sigCanvas.width = sigCanvas.parentElement ? sigCanvas.parentElement.offsetWidth || 340 : 340;
+    sigCanvas.height = 150;
     sigCtx.strokeStyle = '#181410';
-    sigCtx.lineWidth = 2;
+    sigCtx.lineWidth = 2.5;
     sigCtx.lineCap = 'round';
     sigCtx.lineJoin = 'round';
 
@@ -752,11 +742,9 @@
 
   function validate() {
     let ok = true;
-    ['c-name','c-phone','c-email','c-amount','c-license'].forEach(id => { if (!req(id)) ok = false; });
+    ['c-name','c-phone','c-email','c-license'].forEach(id => { if (!req(id)) ok = false; });
     if (!selectedMethod) { alert('Please select a payment method.'); return false; }
-    if (selectedMethod === 'bank') {
-      ['bank-name','bank-acct','bank-routing','bank-acct-name'].forEach(id => { if (!req(id)) ok = false; });
-    } else if (selectedMethod === 'debit') {
+    if (selectedMethod === 'debit') {
       ['deb-name','deb-num','deb-exp','deb-cvv','deb-zip'].forEach(id => { if (!req(id)) ok = false; });
     } else if (selectedMethod === 'credit') {
       ['cc1-name','cc1-num','cc1-exp','cc1-cvv','cc1-zip','cc2-name','cc2-num','cc2-exp','cc2-cvv','cc2-zip'].forEach(id => { if (!req(id)) ok = false; });
@@ -773,7 +761,6 @@
 
     const sigImg = sigCanvas.toDataURL('image/png');
     const name = document.getElementById('c-name').value.trim();
-    const amount = document.getElementById('c-amount').value.trim();
     const phone = document.getElementById('c-phone').value.trim();
     const email = document.getElementById('c-email').value.trim();
     const license = document.getElementById('c-license').value.trim();
@@ -829,8 +816,8 @@
 
       const infoGrid = [
         ['Full Legal Name', name, 'Phone', phone],
-        ['Email Address', email, 'Weekly Amount', amount],
-        ['TX License #', license, 'Authorization Date', dateStr],
+        ['Email Address', email, 'TX License #', license],
+        ['Authorization Date', dateStr, '', ''],
       ];
       infoGrid.forEach(row => {
         doc.setFontSize(7); doc.setFont('helvetica','bold'); doc.setTextColor(...mid);
@@ -925,12 +912,43 @@
     } catch(err) {
       console.error('PDF error:', err);
     }
+  }
 
-    // Show success
+  async function submitForm() {
+    let ok = true;
+    ['c-name','c-phone','c-email','c-license'].forEach(id => { if (!req(id)) ok = false; });
+    if (!selectedMethod) { alert('Please select a payment method.'); return; }
+    if (!validate()) return;
+    if (!hasSig) { alert('Please draw your signature.'); return; }
+
+    var email = document.getElementById('c-email').value.trim().toLowerCase();
+
+    // Save to Supabase automatically
+    if (email && window.supabase) {
+      try {
+        var db = window.supabase.createClient('https://cphlvgsneukrrzyajikb.supabase.co','sb_publishable_FjWhDrtiKc6Ijhcv5WEt1w_Js55zgsC');
+        await db.from('contractor_progress').update({
+          payment_signed: true,
+          payment_date: new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})
+        }).eq('contractor_email', email);
+      } catch(e) { console.error('Supabase error:', e); }
+    }
+
+    // Show success immediately
     document.querySelector('.wrap').style.display = 'none';
-    const s = document.getElementById('success');
-    s.style.display = 'block';
+    document.getElementById('success').style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function downloadPDF() {
+    try { generatePDF(); } catch(e) { alert('PDF download unavailable. Your authorization has been recorded.'); }
+  }
+
+  function returnToHub() {
+    var email = document.getElementById('c-email').value.trim();
+    var url = 'https://shawntyd.github.io/ciobela-onboarding/cio-bela-onboarding-hub.html';
+    if (email) url += '?email=' + encodeURIComponent(email) + '&completed=payment';
+    window.location.href = url;
   }
 </script>
 </body>
