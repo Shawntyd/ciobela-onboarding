@@ -25,11 +25,22 @@
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
+  html {
+    height: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: none !important;
+  }
+
   body {
     font-family: 'Jost', sans-serif;
     background: var(--cream);
     color: var(--ink);
-    min-height: 100vh;
+    height: auto;
+    min-height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   /* ── HEADER ── */
@@ -1191,10 +1202,17 @@
     currentPage = n;
     document.getElementById('page-' + n).classList.add('active');
     updateProgress();
-    // Scroll to top — works on mobile and inside iframes
+
+    // Scroll to very top — all methods for maximum compatibility
     try { window.scrollTo(0, 0); } catch(e) {}
     try { document.documentElement.scrollTop = 0; } catch(e) {}
     try { document.body.scrollTop = 0; } catch(e) {}
+    // Scroll the header into view as anchor
+    try {
+      var hdr = document.querySelector('header');
+      if (hdr) hdr.scrollIntoView({ block: 'start' });
+    } catch(e) {}
+
     if (n === 8) populateReview();
   }
 
