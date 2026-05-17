@@ -1055,53 +1055,51 @@ canvas#sigPad { display: block; width: 100%; height: 150px; cursor: crosshair; t
 
   // ── SUBMIT ──
   async function submitHandbook() {
-    // check all acked
+    // Validate sections acknowledged
     if (Object.keys(acked).length < TOTAL_SECS) {
       document.getElementById('pending-banner').classList.add('visible');
       return;
     }
     document.getElementById('pending-banner').classList.remove('visible');
 
-    const nameEl = document.getElementById('sig-name');
-    const phoneEl = document.getElementById('sig-phone');
-    const emailEl = document.getElementById('sig-email');
-    const licEl = document.getElementById('sig-license');
-    let ok = true;
-    [nameEl,phoneEl,emailEl,licEl].forEach(el => {
-      if (!el.value.trim()) { el.classList.add('invalid'); ok = false; }
-      else el.classList.remove('invalid');
-    });
-    if (!ok) { alert('Please complete all required fields.'); return; }
-    if (!hasSig) { alert('Please draw your signature before submitting.'); return; }
-
-    const sigImg = sc.toDataURL('image/png');
-    const name = nameEl.value.trim();
-    const phone = phoneEl.value.trim();
-    const email = emailEl.value.trim();
-    const license = licEl.value.trim();
-
-    // Show success FIRST before PDF generation
-    var sbEmail = document.getElementById('sig-email').value.trim().toLowerCase();
-    if (sbEmail && window.supabase) {
-      try {
-        var db = window.supabase.createClient('https://cphlvgsneukrrzyajikb.supabase.co','sb_publishable_FjWhDrtiKc6Ijhcv5WEt1w_Js55zgsC');
-        await db.from('contractor_progress').update({
-          standards_signed: true
-        }).eq('contractor_email', sbEmail);
-      } catch(e) { console.error('Supabase error:', e); }
+    // Validate fields
+    var nameVal = document.getElementById('sig-name').value.trim();
+    var phoneVal = document.getElementById('sig-phone').value.trim();
+    var emailVal = document.getElementById('sig-email').value.trim();
+    var licVal = document.getElementById('sig-license').value.trim();
+    if (!nameVal || !phoneVal || !emailVal || !licVal) {
+      alert('Please complete all required fields before submitting.');
+      return;
     }
 
+    // Show success screen immediately — don't wait for anything
     document.getElementById('hero').style.display = 'none';
-    document.getElementById('handbook').style.display = 'none';
     document.getElementById('sticky-nav').style.display = 'none';
-    document.getElementById('success').style.display = 'block';
+    document.getElementById('handbook').style.display = 'none';
+    document.getElementById('sign-page').style.display = 'none';
+    var successEl = document.getElementById('success');
+    successEl.style.display = 'block';
+    successEl.style.padding = '60px 20px';
+    successEl.style.textAlign = 'center';
     try { window.scrollTo(0,0); } catch(e) {}
     try { document.documentElement.scrollTop=0; } catch(e) {}
     try { document.body.scrollTop=0; } catch(e) {}
-    setTimeout(function(){ 
-      try { document.getElementById('success').scrollIntoView({block:'start'}); } catch(e) {}
-    }, 100);
 
+    // Save to Supabase in background — non-blocking
+    if (emailVal && window.supabase) {
+      try {
+        var db = window.supabase.createClient('https://cphlvgsneukrrzyajikb.supabase.co','sb_publishable_FjWhDrtiKc6Ijhcv5WEt1w_Js55zgsC');
+        db.from('contractor_progress').update({ standards_signed: true }).eq('contractor_email', emailVal.toLowerCase());
+      } catch(e) { console.error('Supabase error:', e); }
+    }
+  }
+
+  function generatePDF() {
+    var name = document.getElementById('sig-name').value.trim();
+    var phone = document.getElementById('sig-phone').value.trim();
+    var email = document.getElementById('sig-email').value.trim();
+    var license = document.getElementById('sig-license').value.trim();
+    var sigImg = sc ? sc.toDataURL('image/png') : '';
     // Generate PDF in background after short delay
     setTimeout(function() {
       try {
