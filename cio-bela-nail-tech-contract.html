@@ -1208,7 +1208,22 @@
     window.location.hash = '';
     window.location.hash = 'top-anchor';
 
-    if (n === 8) populateReview();
+    if (n === 8) {
+      populateReview();
+      // Reinitialize signature canvas now that it's visible
+      setTimeout(function() {
+        if (sigCanvas) {
+          var w = sigCanvas.parentElement ? sigCanvas.parentElement.offsetWidth || 300 : 300;
+          sigCanvas.width = w;
+          sigCanvas.height = 160;
+          sigCtx.strokeStyle = '#1C1712';
+          sigCtx.lineWidth = 2.5;
+          sigCtx.lineCap = 'round';
+          sigCtx.lineJoin = 'round';
+          hasSig = false;
+        }
+      }, 50);
+    }
   }
 
   // ── VALIDATION ──
@@ -1272,36 +1287,42 @@
     sigCanvas = document.getElementById('sigCanvas');
     sigCtx = sigCanvas.getContext('2d');
 
-    function resize() {
-      const ratio = window.devicePixelRatio || 1;
-      const rect = sigCanvas.getBoundingClientRect();
-      sigCanvas.width = rect.width * ratio;
-      sigCanvas.height = rect.height * ratio;
-      sigCtx.scale(ratio, ratio);
+    function setupCanvas() {
+      // Set a fixed pixel size — don't rely on getBoundingClientRect when hidden
+      var w = sigCanvas.parentElement ? sigCanvas.parentElement.offsetWidth || 300 : 300;
+      sigCanvas.style.width = '100%';
+      sigCanvas.style.height = '160px';
+      sigCanvas.width = w;
+      sigCanvas.height = 160;
       sigCtx.strokeStyle = '#1C1712';
-      sigCtx.lineWidth = 2;
+      sigCtx.lineWidth = 2.5;
       sigCtx.lineCap = 'round';
       sigCtx.lineJoin = 'round';
     }
-    resize();
+    setupCanvas();
+    // Re-setup when signature page becomes visible
+    window.addEventListener('resize', setupCanvas);
 
-    const pos = (e) => {
-      const r = sigCanvas.getBoundingClientRect();
-      const src = e.touches ? e.touches[0] : e;
+    var getPos = function(e) {
+      var r = sigCanvas.getBoundingClientRect();
+      var src = e.touches ? e.touches[0] : e;
       return { x: src.clientX - r.left, y: src.clientY - r.top };
     };
-    sigCanvas.addEventListener('mousedown', e => { drawing = true; const p = pos(e); sigCtx.beginPath(); sigCtx.moveTo(p.x, p.y); });
-    sigCanvas.addEventListener('mousemove', e => { if (!drawing) return; hasSig = true; const p = pos(e); sigCtx.lineTo(p.x, p.y); sigCtx.stroke(); });
-    sigCanvas.addEventListener('mouseup', () => drawing = false);
-    sigCanvas.addEventListener('mouseleave', () => drawing = false);
-    sigCanvas.addEventListener('touchstart', e => { e.preventDefault(); drawing = true; const p = pos(e); sigCtx.beginPath(); sigCtx.moveTo(p.x, p.y); }, { passive: false });
-    sigCanvas.addEventListener('touchmove', e => { e.preventDefault(); if (!drawing) return; hasSig = true; const p = pos(e); sigCtx.lineTo(p.x, p.y); sigCtx.stroke(); }, { passive: false });
-    sigCanvas.addEventListener('touchend', () => drawing = false);
+
+    sigCanvas.addEventListener('mousedown', function(e) { drawing = true; var p = getPos(e); sigCtx.beginPath(); sigCtx.moveTo(p.x, p.y); });
+    sigCanvas.addEventListener('mousemove', function(e) { if (!drawing) return; hasSig = true; var p = getPos(e); sigCtx.lineTo(p.x, p.y); sigCtx.stroke(); });
+    sigCanvas.addEventListener('mouseup', function() { drawing = false; });
+    sigCanvas.addEventListener('mouseleave', function() { drawing = false; });
+    sigCanvas.addEventListener('touchstart', function(e) { e.preventDefault(); drawing = true; var p = getPos(e); sigCtx.beginPath(); sigCtx.moveTo(p.x, p.y); }, { passive: false });
+    sigCanvas.addEventListener('touchmove', function(e) { e.preventDefault(); if (!drawing) return; hasSig = true; var p = getPos(e); sigCtx.lineTo(p.x, p.y); sigCtx.stroke(); }, { passive: false });
+    sigCanvas.addEventListener('touchend', function() { drawing = false; });
   }
 
   function clearSig() {
-    sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
-    hasSig = false;
+    if (sigCtx && sigCanvas) {
+      sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+      hasSig = false;
+    }
   }
 
   // ── SUBMIT & PDF ──
