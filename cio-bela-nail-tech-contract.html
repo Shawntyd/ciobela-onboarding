@@ -863,7 +863,7 @@
     </div>
 
     <div class="alert-box">
-      <strong>⚠ Liquidated Damages:</strong> Any unauthorized export, copying, downloading, or solicitation of Salon clients to a competitor, personal social media, or outside booking platform shall result in <strong>$2,500 in Liquidated Damages per instance</strong>, payable immediately, in addition to any equitable relief the Salon may seek in a Montgomery County court.
+      <strong>Note:</strong> This prohibition applies exclusively to clients who were sourced through Cio Bela's booking platform, marketing, or referral network. Contractor retains full rights to their pre-existing personal clientele. Any unauthorized solicitation of <em>Salon-sourced</em> clients shall result in <strong>$2,500 in Liquidated Damages per instance</strong>, payable immediately, in addition to any equitable relief the Salon may seek in a Montgomery County court.
     </div>
 
     <div class="clause-card">
@@ -1083,21 +1083,17 @@
   <!-- ════════════════════════════════ SUCCESS ════════════════════════════════ -->
   <div id="success">
     <div class="success-icon">✓</div>
-    <h2 class="success-title">Agreement Complete</h2>
+    <h2 class="success-title">Agreement Signed!</h2>
     <p class="success-body">
-      Your contractor agreement has been submitted and your PDF has been generated. Please complete the following step to finalize your onboarding:
+      Your contractor agreement has been recorded. You're all set — tap the button below to return to your onboarding checklist and complete your next document.
     </p>
-    <div class="email-block">ciobela@email.com</div>
-    <div class="next-steps">
-      <h4>Next Steps</h4>
-      <ul>
-        <li>Open the downloaded PDF from your device</li>
-        <li>Email the PDF to <strong>ciobela@email.com</strong> with the subject line: <em>"[Your Name] — Contractor Agreement"</em></li>
-        <li>Bring a copy of your <strong>Texas license</strong> on your first day</li>
-        <li>Complete your <strong>Credit Card Authorization Form</strong> (sent separately)</li>
-        <li>Management will confirm your start date and station assignment within 24–48 hours</li>
-      </ul>
-    </div>
+    <button onclick="returnToHub()" style="display:block;width:100%;max-width:400px;margin:24px auto 12px;background:#2D5A3D;color:#fff;border:none;padding:18px 32px;font-family:'Jost',sans-serif;font-size:13px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;cursor:pointer;border-radius:3px;">
+      ← Return to Onboarding Checklist
+    </button>
+    <button id="pdf-btn" onclick="downloadPDF()" style="display:block;width:100%;max-width:400px;margin:0 auto 24px;background:transparent;color:#6B5E4E;border:1px solid #D4C4B0;padding:14px 32px;font-family:'Jost',sans-serif;font-size:11px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;border-radius:3px;">
+      Download PDF Copy (Optional)
+    </button>
+    <p style="font-size:11px;color:#A0927E;text-align:center;max-width:360px;margin:0 auto;">Your signature and completion have been recorded automatically. No email needed.</p>
   </div>
 
 </div><!-- /container -->
@@ -1294,22 +1290,14 @@
   }
 
   // ── SUBMIT & PDF ──
-  async function submitContract() {
-    const sigName = document.getElementById('sig-name').value.trim();
-    if (!sigName) { alert('Please type your full legal name to confirm your signature.'); return; }
-    if (!hasSig) { alert('Please draw your signature in the signature box.'); return; }
-    if (!validatePage(8)) return;
-
-    const sigImage = sigCanvas.toDataURL('image/png');
+  async function generateAndDownloadPDF() {
+    const sigName = _sigName || document.getElementById('sig-name').value.trim();
+    const sigImage = sigCanvas ? sigCanvas.toDataURL('image/png') : '';
     const now = new Date();
     const dateStr = now.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
     const timeStr = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',timeZoneName:'short'});
-
-    // Gather services
     const chips = document.querySelectorAll('.service-chip input:checked');
     const services = Array.from(chips).map(c => c.parentElement.textContent.trim());
-
-    // ── BUILD PDF ──
     try {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'letter' });
@@ -1354,11 +1342,10 @@
 
       function alertLine(txt) {
         checkSpace(14);
-        doc.setFillColor(253, 240, 236); doc.rect(M, y, CW, 10, 'F');
-        doc.setDrawColor(139, 58, 42); doc.setLineWidth(0.5); doc.line(M, y, M, y + 10);
-        doc.setFontSize(8.5); doc.setFont('helvetica','bold'); doc.setTextColor(139, 58, 42);
+        // Render as plain body text — no red highlighting
+        doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(...ink);
         const lines = doc.splitTextToSize(txt, CW - 6);
-        doc.text(lines, M + 4, y + 6);
+        doc.text(lines, M, y + 6);
         y += lines.length * 5.5 + 6;
       }
 
@@ -1427,7 +1414,7 @@
       doc.text('SECTION II — FINANCIALS & BILLING', M, y); y += 10;
 
       clauseTitle('2.1 Saturday Auto-Pay Authorization');
-      bodyText('Contractor authorizes the Salon to charge the card on file every Saturday for the following week\'s booth rent. Rent is a fixed lease fee earned upon receipt. No refunds or pro-rating shall be granted for vacation, illness, slow weeks, or any other reason.');
+      bodyText('Contractor authorizes the Salon to charge the card on file every Saturday for the following week\'s service fee. The service fee is earned upon receipt. No refunds or pro-rating shall be granted for vacation, personal time off, illness, or any other reason.');
       alertLine('⚠  Declined charges that go unresolved by Sunday midnight constitute default and may trigger immediate lockout.');
       clauseTitle('2.2 Tier Sovereignty');
       bodyText('Transition between rental tiers is at the sole and absolute discretion of Salon Management. Tier changes will be communicated no less than 7 days in advance unless resulting from a material breach.');
@@ -1474,9 +1461,9 @@
 
       clauseTitle('5.1 Exclusive Ownership of Client Data');
       bodyText('All client data — including names, phone numbers, email addresses, service history, and appointment records — contained within the Salon\'s digital booking system is the exclusive Trade Secret property of Cio Bela. Contractor has no ownership interest in Salon client data.');
-      alertLine('⚠  Unauthorized solicitation of Salon clients results in $2,500 in Liquidated Damages PER INSTANCE, payable immediately.');
+      bodyText('This prohibition applies exclusively to clients sourced through Cio Bela\'s booking platform, marketing, or referral network. Contractor retains full rights to their pre-existing personal clientele. Unauthorized solicitation of Salon-sourced clients results in $2,500 in Liquidated Damages per instance, payable immediately.');
       clauseTitle('5.2 Client Solicitation Prohibition (12-Month Post-Termination)');
-      bodyText('During the term of this Agreement and for 12 months following termination, Contractor shall not directly or indirectly solicit or encourage any Cio Bela client to transfer their patronage to any other salon or location.');
+      bodyText('During the term of this Agreement and for 12 months following termination, Contractor shall not directly or indirectly solicit or encourage any Cio Bela salon-sourced client to transfer their patronage to any other salon or location.');
       clauseTitle('5.3 Social Media Branding Policy');
       bodyText('Upon termination or resignation, Contractor must remove all references to "Cio Bela" from social media bios, highlights, and profiles within 24 hours. Failure to comply constitutes Brand Infringement.');
       clauseTitle('5.4 Booking Platform Policy');
@@ -1561,15 +1548,53 @@
       doc.save('CioBela-NailTech-ContractorAgreement-' + sigName.replace(/\s+/g, '-') + '.pdf');
     } catch (err) {
       console.error('PDF error:', err);
-      alert('PDF generation encountered an issue. Please screenshot your form as a backup.');
+    }
+  }
+
+  // Store doc reference for optional download
+  var _pdfDoc = null;
+  var _sigName = '';
+
+  async function submitContract() {
+    const sigName = document.getElementById('sig-name').value.trim();
+    if (!sigName) { alert('Please type your full legal name to confirm your signature.'); return; }
+    if (!hasSig) { alert('Please draw your signature in the signature box.'); return; }
+    if (!validatePage(8)) return;
+
+    _sigName = sigName;
+
+    // ── SAVE TO SUPABASE AUTOMATICALLY ──
+    var email = document.getElementById('cont-email').value.trim().toLowerCase();
+    if (email && window.supabase) {
+      try {
+        var db = window.supabase.createClient(
+          'https://cphlvgsneukrrzyajikb.supabase.co',
+          'sb_publishable_FjWhDrtiKc6Ijhcv5WEt1w_Js55zgsC'
+        );
+        await db.from('contractor_progress').update({
+          contract_signed: true,
+          contract_date: new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})
+        }).eq('contractor_email', email);
+      } catch(e) { console.error('Supabase mark complete error:', e); }
     }
 
-    // Show success
+    // Show success screen immediately — no waiting for PDF
     document.getElementById('progress-bar-wrap').style.display = 'none';
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('success').style.display = 'block';
     document.getElementById('success').classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function downloadPDF() {
+    generateAndDownloadPDF();
+  }
+
+  function returnToHub() {
+    var email = document.getElementById('cont-email').value.trim();
+    var hubUrl = 'https://shawntyd.github.io/ciobela-onboarding/cio-bela-onboarding-hub.html';
+    if (email) hubUrl += '?email=' + encodeURIComponent(email) + '&completed=contract';
+    window.location.href = hubUrl;
   }
 </script>
 </body>
