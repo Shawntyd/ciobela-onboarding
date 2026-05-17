@@ -478,6 +478,9 @@ function scrollTop() {
   var sc, sx;
 
   window.addEventListener('DOMContentLoaded', function() {
+    try { window.scrollTo(0,0); } catch(e) {}
+    try { document.documentElement.scrollTop=0; } catch(e) {}
+    try { document.body.scrollTop=0; } catch(e) {}
     document.getElementById('sig-date').value = dateStr;
     initSig();
 

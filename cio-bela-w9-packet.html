@@ -426,6 +426,9 @@ function scrollTop() {
   const timeStr = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',timeZoneName:'short'});
 
   window.addEventListener('DOMContentLoaded', () => {
+    try { window.scrollTo(0,0); } catch(e) {}
+    try { document.documentElement.scrollTop=0; } catch(e) {}
+    try { document.body.scrollTop=0; } catch(e) {}
     document.getElementById('sig-date').value = dateStr;
     updProg();
     initSig();

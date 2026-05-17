@@ -711,6 +711,9 @@ function scrollTop() {
   // ── SIGNATURE ──
   let sigCanvas, sigCtx, drawing = false, hasSig = false;
   window.addEventListener('DOMContentLoaded', () => {
+    try { window.scrollTo(0,0); } catch(e) {}
+    try { document.documentElement.scrollTop=0; } catch(e) {}
+    try { document.body.scrollTop=0; } catch(e) {}
     sigCanvas = document.getElementById('sigPad');
     sigCtx = sigCanvas.getContext('2d');
     sigCanvas.width = sigCanvas.parentElement ? sigCanvas.parentElement.offsetWidth || 340 : 340;

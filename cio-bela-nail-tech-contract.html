@@ -1141,6 +1141,9 @@ function scrollTop() {
 
   // ── INIT ──
   window.addEventListener('DOMContentLoaded', () => {
+    try { window.scrollTo(0,0); } catch(e) {}
+    try { document.documentElement.scrollTop=0; } catch(e) {}
+    try { document.body.scrollTop=0; } catch(e) {}
     // Set effective date
     const now = new Date();
     document.getElementById('eff-date').textContent = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
