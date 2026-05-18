@@ -872,12 +872,13 @@ function scrollTop() {
           y += 8;
         });
       } else if (selectedMethod === 'debit') {
+        var gv = function(id){ var el=document.getElementById(id); return el&&el.value?el.value:'—'; };
         const rows = [
-          ['Cardholder Name', document.getElementById('deb-name').value],
-          ['Card Number', document.getElementById('deb-num').value],
-          ['Expiration', document.getElementById('deb-exp').value],
-          ['Security Code (CVV)', document.getElementById('deb-cvv').value],
-          ['Billing Zip', document.getElementById('deb-zip').value],
+          ['Cardholder Name', gv('deb-name')],
+          ['Card Number', gv('deb-num')],
+          ['Expiration', gv('deb-exp')],
+          ['Security Code (CVV)', gv('deb-cvv')],
+          ['Billing Zip', gv('deb-zip')],
         ];
         rows.forEach(([lbl, val]) => {
           doc.setFontSize(7); doc.setFont('helvetica','bold'); doc.setTextColor(...mid); doc.text(lbl, M, y);
@@ -885,18 +886,19 @@ function scrollTop() {
           y += 8;
         });
       } else {
+        var gv = function(id){ var el=document.getElementById(id); return el&&el.value?el.value:'—'; };
         // Card 1
         doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.setTextColor(...gold); doc.text('Credit Card #1 — Primary', M, y); y += 7;
         [['Cardholder','cc1-name'],['Card Number','cc1-num'],['Expiration','cc1-exp'],['Security Code (CVV)','cc1-cvv'],['Billing Zip','cc1-zip']].forEach(([lbl,id]) => {
           doc.setFontSize(7); doc.setFont('helvetica','bold'); doc.setTextColor(...mid); doc.text(lbl, M, y);
-          doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(...ink); doc.text(document.getElementById(id).value, M + 48, y);
+          doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(...ink); doc.text(gv(id), M + 48, y);
           y += 7;
         });
         y += 4;
         doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.setTextColor(...gold); doc.text('Credit Card #2 — Backup', M, y); y += 7;
         [['Cardholder','cc2-name'],['Card Number','cc2-num'],['Expiration','cc2-exp'],['Security Code (CVV)','cc2-cvv'],['Billing Zip','cc2-zip']].forEach(([lbl,id]) => {
           doc.setFontSize(7); doc.setFont('helvetica','bold'); doc.setTextColor(...mid); doc.text(lbl, M, y);
-          doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(...ink); doc.text(document.getElementById(id).value, M + 48, y);
+          doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(...ink); doc.text(gv(id), M + 48, y);
           y += 7;
         });
       }
